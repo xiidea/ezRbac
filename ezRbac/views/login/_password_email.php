@@ -28,7 +28,7 @@
 
                                         <div align="justify">
                                             <p>
-                                                <?php echo "Dear <strong>$data[name] !</strong>" ?>
+                                                <?php echo "Dear <strong>user !</strong>" ?>
                                                 <br><br>
 
                                                 Our system received a request to reset the password for your account.
@@ -36,8 +36,8 @@
 
                                             <p>If you want to reset your password, click on the link below (or copy and
                                                 paste the URL into your browser):<br>
-                                                <a href="<?php echo $data['url'] ?>"
-                                                   target="_blank"><?php echo $data['url'] ?></a></p>
+                                                <a href="<?php echo $url ?>"
+                                                   target="_blank"><?php echo  $url ?></a></p>
 
                                             <p>If you don't want to reset your password, please ignore this message. The
                                                 link willl become invalid after 2 days. Your password will not be reset.
@@ -48,14 +48,12 @@
 
                                                 <br/><br/>
                                                 with best regards !<br>
-                                                <b>System Administrator XiiDEA.COM<br>
-                                                </b>+88-01817087873<br>
-                                                +44-7924000727<br>
+                                                <b>System Administrator<br>
                                                 <br/>
                                                 <br/>
                                                 <font color="#333333">
                                                     <b>Confidentiality Information and Disclaimer:</b></font><br>
-                                                <span style="color:#333333">This communication sent from XIAZBD.COM  is confidential and intended solely for the use of addressee. Any retransmission, dissemination or the use of this information by persons other than addressee is prohibited. If you did not initiate this process, please feel free to disregard this message and delete it.</span>
+                                                <span style="color:#333333">This communication sent from our website  is confidential and intended solely for the use of addressee. Any retransmission, dissemination or the use of this information by persons other than addressee is prohibited. If you did not initiate this process, please feel free to disregard this message and delete it.</span>
                                             </p>
                                         </div>
 

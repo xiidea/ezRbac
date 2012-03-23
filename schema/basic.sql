@@ -1,5 +1,5 @@
 /*
-SQLyog Ultimate v9.50 
+SQLyog Ultimate v9.62 
 MySQL - 5.1.41 : Database - ezrbac
 *********************************************************************
 */
@@ -20,13 +20,12 @@ CREATE TABLE `system_users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(254) DEFAULT NULL,
   `password` varchar(160) DEFAULT NULL,
-  `salt` varchar(20) DEFAULT NULL,
+  `salt` varchar(160) DEFAULT NULL,
   `user_role_id` int(10) DEFAULT NULL,
   `last_login` datetime DEFAULT '0000-00-00 00:00:00',
   `last_login_ip` int(11) DEFAULT NULL,
   `reset_request_code` varchar(128) DEFAULT NULL,
   `reset_request_time` datetime DEFAULT NULL,
-  `reset_request_expiry` datetime DEFAULT NULL,
   `reset_request_ip` int(11) DEFAULT NULL,
   `new_email` varchar(254) DEFAULT NULL,
   `new_password` varchar(160) DEFAULT NULL,

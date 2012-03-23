@@ -1,5 +1,5 @@
 /*
-SQLyog Ultimate v9.50 
+SQLyog Ultimate v9.62 
 MySQL - 5.1.41 : Database - ezrbac
 *********************************************************************
 */
@@ -14,11 +14,11 @@ MySQL - 5.1.41 : Database - ezrbac
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 /*Data for the table `system_users` */
 
-insert  into `system_users`(`id`,`email`,`password`,`salt`,`user_role_id`,`last_login`,`last_login_ip`,`reset_request_code`,`reset_request_time`,`reset_request_expiry`,`reset_request_ip`,`new_email`,`new_password`,`verification_status`) values (1,'a@a.com','71dd07494c5ee54992a27746d547e25dee01bd97','123456',1,'2012-03-12 10:43:40',0,NULL,NULL,NULL,NULL,NULL,NULL,1);
+insert  into `system_users`(`id`,`email`,`password`,`salt`,`user_role_id`,`last_login`,`last_login_ip`,`reset_request_code`,`reset_request_time`,`reset_request_ip`,`new_email`,`new_password`,`verification_status`) values (1,'admin@admin.com','8e666f12a66c17a952a1d5e273428e478e02d943','4f6cdddc4979b8.51434094',1,'2012-03-24 02:52:51',0,NULL,NULL,NULL,NULL,NULL,1);
 
 /*Data for the table `user_access_map` */
 
-insert  into `user_access_map`(`user_role_id`,`controller`,`permission`) values (1,'admin/welcome','00000');
+insert  into `user_access_map`(`user_role_id`,`controller`,`permission`) values (1,'admin/welcome','00001');
 
 /*Data for the table `user_autologin` */
 

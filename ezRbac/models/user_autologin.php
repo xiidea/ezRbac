@@ -17,9 +17,16 @@
 class User_Autologin extends CI_Model
 {
 
+    private $_table_name;
+
+    private $_user_table_name;
+
 	function __construct()
 	{
 		parent::__construct();
+        $CI=& get_instance();
+        $this->_table_name=$CI->config->item('auto_login_table','ez_rbac');
+        $this->_user_table_name=$CI->config->item('system_users','ez_rbac');
 	}
 
 	/**
@@ -32,13 +39,13 @@ class User_Autologin extends CI_Model
 	 */
 	function get($user_id, $key)
 	{
-		$this->db->select('system_users.id');
-		$this->db->select('system_users.email');
-        $this->db->select('system_users.user_role_id');
-		$this->db->from('system_users');
-		$this->db->join('user_autologin', 'user_autologin.user_id = system_users.id');
-		$this->db->where('user_autologin.user_id', $user_id);
-		$this->db->where('user_autologin.key_id', $key);
+		$this->db->select($this->_user_table_name.'.id');
+		$this->db->select($this->_user_table_name.'.email');
+        $this->db->select($this->_user_table_name.'.user_role_id');
+		$this->db->from($this->_user_table_name);
+		$this->db->join($this->_table_name, $this->_table_name.'.user_id = '.$this->_user_table_name.'.id');
+		$this->db->where($this->_table_name.'.user_id', $user_id);
+		$this->db->where($this->_table_name.'.key_id', $key);
 		$query = $this->db->get();
 		if ($query->num_rows() == 1) return $query->row();
 		return NULL;
@@ -53,7 +60,7 @@ class User_Autologin extends CI_Model
 	 */
 	function set($user_id, $key)
 	{
-		return $this->db->insert($this->table_name, array(
+		return $this->db->insert($this->_table_name, array(
 			'user_id' 		=> $user_id,
 			'key_id'	 	=> $key,
 			'user_agent' 	=> substr($this->input->user_agent(), 0, 149),
@@ -72,7 +79,7 @@ class User_Autologin extends CI_Model
 	{
 		$this->db->where('user_id', $user_id);
 		$this->db->where('key_id', $key);
-		$this->db->delete($this->table_name);
+		$this->db->delete($this->_table_name);
 	}
 
 	/**
@@ -84,7 +91,7 @@ class User_Autologin extends CI_Model
 	function clear($user_id)
 	{
 		$this->db->where('user_id', $user_id);
-		$this->db->delete($this->table_name);
+		$this->db->delete($this->_table_name);
 	}
 
 	/**
@@ -98,7 +105,7 @@ class User_Autologin extends CI_Model
 		$this->db->where('user_id', $user_id);
 		$this->db->where('user_agent', substr($this->input->user_agent(), 0, 149));
 		$this->db->where('last_ip', $this->input->ip_address());
-		$this->db->delete($this->table_name);
+		$this->db->delete($this->_table_name);
 	}
 }
 

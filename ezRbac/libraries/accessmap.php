@@ -57,7 +57,7 @@ class AccessMap{
 		$controller=strtolower($param["controller"]);
 
         if($this->isGuest()){   //Nothing to do but handle login
-            $action= $this->CI->input->post("action")?:'login';
+            $action= $this->CI->input->post("action")?$this->CI->input->post("action"):'login';
             if(!($action=='login' || $action=='recover_password')){ //This usefull for wrong action parameter
                 $action='login';
             }

@@ -6,14 +6,14 @@ A simple yet easy to implement Role Based Access Control Library for popular PHP
 Key Features
 ============
 * Easy to integrate with Codeigniter Application
-* User Login system integrated
+* User Login system with password recovery integrated
 * Easy To Customize!!!
 * Coming many more....!!!
  
 
 Current Active Version
 ======================
-v 0.1 Under development
+v 0.2 Under development
 
  
 How To Install

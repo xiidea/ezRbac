@@ -20,23 +20,32 @@ class ezuri
 
 
     /**
-     * @var array list of rbac specific urls
+     * @var string rbac specific url identifier
      */
-    private $_manage_urls=array('rbac','logout' );
+    private $_manage_url;
+
+    /**
+     * @var bool true if the routing used for clean url
+     */
+    private $_use_routing=false;
+
+    private $_base_url;
 
     private $_rbac_param=array();
 
     function __construct()
     {
         $this->CI = & get_instance();
+        $this->_manage_url=$this->CI->config->item('ezrbac_url','ez_rbac');
+        $this->_use_routing=$this->CI->config->item('use_routing','ez_rbac');
+        $this->_base_url=$this->_use_routing?$this->_manage_url:$this->CI->router->default_controller."/index";
     }
 
-    public function RbacUrl(){
-        $n=$this->CI->router->fetch_directory()?4:3;
-        $the_key=strtolower($this->CI->uri->segment($n));
-        if(in_array($the_key, array_map('strtolower', $this->_manage_urls))){
-            $this->_rbac_param= $this->CI->uri->uri_to_assoc($n+1);
-            return $the_key;
+    public function isRbacUrl(){
+        $the_key=strtolower($this->CI->uri->rsegment(3));
+        if($the_key==strtolower($this->_manage_url)){
+            $this->_rbac_param= $this->CI->uri->ruri_to_assoc(5);
+            return $this->CI->uri->rsegment(4);
         }
         return FALSE;
     }
@@ -46,9 +55,12 @@ class ezuri
     }
 
     public function logout(){
-        return $this->CI->router->default_controller."/index/logout";
+        return $this->_base_url."/logout";
     }
 
+    public function RbacUrl($uri=""){
+        return site_url($this->_base_url."/$uri");
+    }
 }
 /* End of file ezlogin.php */
 /* Location: ./ezRbac/libraries/ezlogin.php */

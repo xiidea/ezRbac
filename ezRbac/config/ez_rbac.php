@@ -21,15 +21,39 @@ $config['redirect_url']="";
 
 //The password validation rule check for minimum password length
 $config['password_min_length']=6;
-
 //The autologin cookie name used to store user data
 $config['autologin_cookie_name']="ezrbac_remember_me";
+
+//The From email for password recovery email
+$config['password_recovery_email']="noreply@yourdomain.com";
+//The subject for password recovery email
+$config['password_recovery_subject']="Password Reset Request";
+
+
+//The database table name used to store autologin data
+$config['auto_login_table']="user_autologin";
+//The database table  name used to store user data
+$config['user_table']="system_users";
+//The database table  name used to store user role info
+$config['user_role_table']="user_role";
+//The database table  name used to store Access Control List as per user role
+$config['access_map_table']="user_access_map";
+
 
 //@TODO Required When Implemented the Rbac Management system
 // Password to access management interface of ACL
 $config['ezrbac_password']="hardtoremember";
 //Enable or disable the management interface
 $config['enable_ezrbac_gui']=true;
+
+//ezrbac specific url identifier
+$config['ezrbac_url']='rbac';
+
+//enable clean url for management interface by adding routing rule
+// if $config['ezrbac_url']='rbac' then
+// add $route['^(rbac)/(.+)$'] =$route['default_controller']."/index/rbac/$2";
+// and set the value to true
+$config['use_routing']=true;
 
 
 /* End of file ez_rbac.php */

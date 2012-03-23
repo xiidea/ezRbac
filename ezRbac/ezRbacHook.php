@@ -81,14 +81,17 @@ private
      * This method will handle all library specific url like namege rbac or logout
      */
     private function manage_access(){
-        switch($this->CI->ezuri->RbacUrl()){
-            case 'rbac':
-                $this->CI->load->library('ezmanage');
+        switch($this->CI->ezuri->isRbacUrl()){
+            case 'manage':
+                //$this->CI->load->library('ezmanage');
                // $uriparam= $this->CI->uri->uri_to_assoc($n+1);
               //@TODO Implement Access Controll management library
                 echo "manage my access control system";
                 exit;
                 break;
+           case 'resetpassword':
+               $this->CI->load->library('ezlogin');
+               $this->CI->ezlogin->resetPassword($this->CI->ezuri->RbacParam());
            case 'logout':
                $this->CI->load->library('ezlogin');
                $this->CI->ezlogin->logout();

@@ -18,27 +18,59 @@ class ezlogin
      */
     private $CI;
 
+    /**
+     * @var string store error
+     */
+    private $error;
+
+    /**
+     *
+     */
     function __construct()
     {
         $this->CI = & get_instance();
     }
 
+
     /**
-     * @return array The validation rule for login form
+     * @param int $index identify the validation rule set
+     * @return array The validation rule for login,recovery and reset password form
      */
-    private function validation_rule(){
-        return array(
-            array(
-                'field'   => 'username',
-                'label'   => 'Email',
-                'rules'   => 'trim|required|valid_email|xss_clean'
-            ),
-            array(
-                'field'   => 'password',
-                'label'   => 'Password',
-                'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']'
-            )
-        );
+    private function validation_rule($index=0){
+        $ret_arr= array(
+                        array(
+                            array(
+                                'field'   => 'username',
+                                'label'   => 'Email',
+                                'rules'   => 'trim|required|valid_email|xss_clean'
+                            ),
+                            array(
+                                'field'   => 'password',
+                                'label'   => 'Password',
+                                'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']'
+                            )
+                        ),
+                        array(
+                            array(
+                                'field'   => 'username',
+                                'label'   => 'Email',
+                                'rules'   => 'trim|required|valid_email|xss_clean'
+                            )
+                         ),
+                        array(
+                            array(
+                                'field'   => 'password',
+                                'label'   => 'New Password',
+                                'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']|matches[re_password]'
+                            ),
+                            array(
+                                'field'   => 're_password',
+                                'label'   => 'Re-Type Password',
+                                'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']'
+                            )
+                        ),
+                     );
+        return $ret_arr[$index];
     }
 
     /**
@@ -68,6 +100,26 @@ class ezlogin
     }
 
     /**
+     * Display the reset password form. if there is any error also show it
+     * @access Private
+     */
+    private function view_password_reset_form(){
+        $data['form_error'] = $this->error;
+        echo $this->CI->load->view('login/reset', $data,true);
+        exit;
+    }
+
+    /**
+     * Display the reset password form. if there is any error also show it
+     * @access Private
+     */
+    private function view_password_reset_message(){
+        $data['reset_success'] = true;
+        echo $this->CI->load->view('login/reset', $data,true);
+        exit;
+    }
+
+    /**
      * validate and process the login
      * @access private
      * @return bool
@@ -78,7 +130,7 @@ class ezlogin
         $password=$this->CI->input->post("password",TRUE);
         $remember=$this->CI->input->post("remember");
 
-        if (!is_null($user = $this->CI->ezuser->get_user_by_email($useemail))) {	// login ok
+        if (!is_null($user = $this->CI->ezuser->get_user_by_email($useemail))) {	//email ok
 
             // Does password match hash in database?
             if ($this->CI->encrypt->sha1($password.$user->salt)===$user->password){		// password ok
@@ -107,6 +159,8 @@ class ezlogin
         return false;
 
     }
+
+
     /**
      * Save data for user's autologin
      *
@@ -197,15 +251,108 @@ class ezlogin
         }
     }
 
-    public function logout_link(){
-        return $this->CI->router->default_controller."/index/logout";
+
+    /**
+     * Recover Password Function
+     * This function called when the password recovery form submited
+     *
+     */
+    function recover_password(){
+        $this->CI->form_validation->set_rules($this->validation_rule(1));
+        if ($this->CI->form_validation->run() == FALSE){
+            $this->error=validation_errors();
+            $this->view_login_form();
+        }
+        $useemail = trim($this->CI->input->post('username',TRUE));
+        $this->CI->load->model('ezuser');
+        if (is_null($user = $this->CI->ezuser->get_user_by_email($useemail))) {	// user not found
+            $this->error='Email address not registered!';
+            $this->view_login_form();
+        }
+        if($this->process_recovery($user)){
+            $data['reset_email_confirm']=true;
+            $data['form_error']='';
+            echo $this->CI->load->view('login/index', $data,true);
+            exit;
+        }
+        $this->view_login_form();
     }
 
     /**
-     *@TODO Implement the recover password feature
+     * validate and process the password recovery
+     * @access private
+     * @return bool
      */
-    function recover_password(){
-        die("recover_password: feature is comming soon");
+    private function process_recovery($user){
+        $key=$this->CI->ezuser->requestPassword($user->id);
+        $data['url']=$this->CI->ezuri->RbacUrl("resetpassword/key/$key/e/".rawurlencode($user->email));
+        $email_body=$this->CI->load->view('login/_password_email', $data,true);
+
+        //Disable this while you running the script on server
+        die($email_body);
+
+        $config['mailtype']='html';
+        $config['wordwrap'] = FALSE;
+        $this->CI->email->initialize($config);
+        $this->CI->email->from($this->CI->config->item('password_recovery_email', 'ez_rbac'), 'EzRbac');
+        $this->CI->email->to($user->email);
+        $this->CI->email->subject($this->CI->config->item('password_recovery_subject', 'ez_rbac'));
+        $this->CI->email->message($email_body);
+        $this->CI->email->set_alt_message('View the mail using a html email client');
+        $this->CI->email->send();
+
+        return TRUE;
+    }
+
+
+    /**
+     * validate and reset the password
+     * @access public
+     * @param array $param
+     * @return boolean
+     */
+    public function resetPassword($param=array()){
+        $key=$param['key'];
+        $email=rawurldecode($param['e']);
+        $this->CI->load->model('ezuser');
+        $user = $this->CI->ezuser->get_user_by_email($email);
+
+        if($user==null){
+            show_404();
+        }
+
+        if($this->validateRequestHash($user,$key)){
+
+            if(isset($_POST['ResetForm'])){
+                $this->CI->form_validation->set_rules($this->validation_rule(2));
+                if ($this->CI->form_validation->run() == FALSE){
+                    $this->error=validation_errors();
+                    $this->view_password_reset_form();
+                }
+
+                $this->CI->load->model('ezuser');
+                $password=$this->CI->input->post("password",TRUE);
+                $this->CI->ezuser->set_new_password((string)$password);
+                $this->view_password_reset_message();
+            }
+            $this->view_password_reset_form();
+        }else{
+            show_404();
+        }
+    }
+
+    /**
+     * @param $user
+     * @param string $key
+     * @return bool
+     */
+    private function validateRequestHash($user,$key=""){
+        if($key==""){
+            return false;
+        }
+        $date = new DateTime($user->reset_request_time);
+        $date->modify("+2 day");
+        return (md5($user->reset_request_code.$user->reset_request_time.$user->reset_request_ip)===$key && $date>new DateTime());
     }
 }
 /* End of file ezlogin.php */
