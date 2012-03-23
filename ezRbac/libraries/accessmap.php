@@ -22,30 +22,30 @@ class AccessMap{
     /**
 	 * @var Array sets the default action list
 	 */
-	 $access_arr=array("publish","delete","edit","create","view"),
+	 $_access_arr=array("publish","delete","edit","create","view"),
 
     /**
      * @var int<p>
      * Used to store the length of access string by auto detecting the access_arr size
      * </p>
      */
-    $access_map_array_size=5,
+    $_access_map_array_size=5,
     /**
      * @var string <p>
      * if a controller not found in the access table what should be the default result
      * </p>
      */
-    $default_access="00001",
+    $_default_access="00001",
 
     /**
 	 * @var Array sets the access values after parsing the access string
 	 */
-	$access_val=array(),
+	$_access_val=array(),
 	
 	/**
 	 * @var mix cache the access details value in array after 1st time parsing
 	 */
-	$access_details=false;
+	$_access_details=false;
 
 
     /**
@@ -78,17 +78,17 @@ class AccessMap{
         $default_access_map=$this->CI->config->item('default_access_map', 'ez_rbac');
         if($default_access_map){
             if(is_array($default_access_map)&& !empty($default_access_map))
-            $this->access_arr=$this->CI->config->item('default_access_map', 'ez_rbac');
+            $this->_access_arr=$this->CI->config->item('default_access_map', 'ez_rbac');
         }
 
         //Make all the valu lower case
-        $this->access_arr=array_map('strtolower',$this->access_arr);
+        $this->_access_arr=array_map('strtolower',$this->_access_arr);
 
-        $this->access_map_array_size=count($this->access_arr);
+        $this->_access_map_array_size=count($this->_access_arr);
 
         $access_str=$this->get_access_string($controller);
         $access_val=$this->validate($access_str);
-        $this->access_val=str_split($access_val);
+        $this->_access_val=str_split($access_val);
     }
 
     /**
@@ -97,7 +97,7 @@ class AccessMap{
      * @return array
      */
     function get_access_map(){
-        return $this->access_arr;
+        return $this->_access_arr;
     }
 
     /**
@@ -134,7 +134,7 @@ class AccessMap{
 		$user_access=$this->CI->db->get('user_access_map');
 		$row=$user_access->result();
         if(!$row){
-            return $this->default_access;
+            return $this->_default_access;
         }
 		return $this->validate($row[0]->permission);
 	}
@@ -146,14 +146,14 @@ class AccessMap{
 	 * @return array of access mode.
 	 */
 	public function getAccessDetails(){
-		if($this->access_details){
-			return $this->access_details;
+		if($this->_access_details){
+			return $this->_access_details;
 		}
 		$access_details=array();
-		foreach ($this->access_arr as $key=>$val){
-			$access_details[$val]=(boolean)$this->access_val[$key];
+		foreach ($this->_access_arr as $key=>$val){
+			$access_details[$val]=(boolean)$this->_access_val[$key];
 		}
-		$this->access_details=$access_details;
+		$this->_access_details=$access_details;
 		return $access_details;
 	}
 	
@@ -164,7 +164,7 @@ class AccessMap{
 	 * @return String. Binary string in a acceptable format
 	 */	
 	private function validate($access_str){
-		return str_pad($access_str,$this->access_map_array_size,0) & str_repeat('1',$this->access_map_array_size);
+		return str_pad($access_str,$this->_access_map_array_size,0) & str_repeat('1',$this->_access_map_array_size);
 	}
 
 	/**

@@ -22,23 +22,23 @@ private
     /**
      * @var array
      */
-    $custom_access_map=array( ),
+    $_custom_access_map=array( ),
     /**
      * @var array
      */
-    $public_controller=array(),
+    $_public_controller=array(),
     /**
      * @var
      */
-    $controller,
+    $_controller,
     /**
      * @var
      */
-    $controller_name,
+    $_controller_name,
     /**
      * @var bool
      */
-    $isAjaxCall=false;
+    $_isAjaxCall=false;
 
     /**
      *Constructor to initial all data and libraries
@@ -55,7 +55,7 @@ private
         $this->CI->config->load('ez_rbac', TRUE, TRUE);
 
         //Get list of public controller from the config file
-        $this->public_controller=$this->CI->config->item('public_controller', 'ez_rbac')?
+        $this->_public_controller=$this->CI->config->item('public_controller', 'ez_rbac')?
                                  $this->CI->config->item('public_controller', 'ez_rbac'):
                                  array();
 
@@ -68,10 +68,10 @@ private
      * @return bool
      */
     private function isPublicRequest(){
-        $this->controller_name=$this->CI->router->fetch_class();
-        $this->controller=$this->CI->router->fetch_directory().$this->controller_name;
+        $this->_controller_name=$this->CI->router->fetch_class();
+        $this->_controller=$this->CI->router->fetch_directory().$this->_controller_name;
 
-        if(in_array($this->controller,$this->public_controller)){
+        if(in_array($this->_controller,$this->_public_controller)){
             return true;
         }
         return false;
@@ -81,10 +81,9 @@ private
      * This method will handle all library specific url like namege rbac or logout
      */
     private function manage_access(){
-       // echo $this->CI->router->default_controller;
-        $n=$this->CI->router->fetch_directory()?4:3;
-        switch($this->CI->uri->segment($n)){
+        switch($this->CI->ezuri->RbacUrl()){
             case 'rbac':
+                $this->CI->load->library('ezmanage');
                // $uriparam= $this->CI->uri->uri_to_assoc($n+1);
               //@TODO Implement Access Controll management library
                 echo "manage my access control system";
@@ -111,26 +110,26 @@ private
             return;
         }
         //Get custom access map defined in controller
-        if(in_array(strtolower('access_map'), array_map('strtolower', get_class_methods($this->controller_name)))){
-            $this->custom_access_map=$this->CI->access_map();
+        if(in_array(strtolower('access_map'), array_map('strtolower', get_class_methods($this->_controller_name)))){
+            $this->_custom_access_map=$this->CI->access_map();
         }
 
-        $this->CI->load->library('accessmap', array("controller"=>$this->controller));
+        $this->CI->load->library('accessmap', array("controller"=>$this->_controller));
 
         $method=$this->CI->router->fetch_method();
 
         //Check if the request is ajax or not
-        $this->isAjaxCall=($this->CI->input->get('ajax')|| $this->CI->input->is_ajax_request());
+        $this->_isAjaxCall=($this->CI->input->get('ajax')|| $this->CI->input->is_ajax_request());
 
         $access_map=$this->CI->accessmap->get_access_map();
         if(!in_array($method,$access_map)){    //The method is not in default acess map
-            if(!isset($this->custom_access_map[$method])){   //The method is not defined in custom access map
+            if(!isset($this->_custom_access_map[$method])){   //The method is not defined in custom access map
                 if($this->CI->config->item('default_access', 'ez_rbac')){
                    return true;     //Default access for action is set to true
                 }
                $this->restrict_access();
             }
-            $method=$this->custom_access_map[$method];
+            $method=$this->_custom_access_map[$method];
         }
 
         $method="can".Ucfirst($method);
@@ -145,7 +144,7 @@ private
      * This method trigger when a restricted resource accessed
      */
     private function restrict_access(){
-        if($this->isAjaxCall){   //do not redirect return json object if it is a ajax request
+        if($this->_isAjaxCall){   //do not redirect return json object if it is a ajax request
             die(json_encode(array('success'=>false,'msg'=>$this->CI->config->item('ajax_no_permission_msg', 'ez_rbac'))));
         }
         if($this->CI->config->item('redirect_url', 'ez_rbac')){

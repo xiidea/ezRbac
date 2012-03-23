@@ -26,7 +26,10 @@ $config['password_min_length']=6;
 $config['autologin_cookie_name']="ezrbac_remember_me";
 
 //@TODO Required When Implemented the Rbac Management system
+// Password to access management interface of ACL
 $config['ezrbac_password']="hardtoremember";
+//Enable or disable the management interface
+$config['enable_ezrbac_gui']=true;
 
 
 /* End of file ez_rbac.php */
