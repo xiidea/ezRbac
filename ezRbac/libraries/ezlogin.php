@@ -1,17 +1,17 @@
 <?php
 /**
- * ezlogin_lib class
+ * ezlogin class
  * A simple class adds the login feature to the package
  *
- * @version	1.0
+ * @version	1.1
  * @package ezRbac
- * @since ezRbac v 0.1
+ * @since ezRbac v 0.2
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class ezlogin_lib
+class ezlogin
 {
     /**
      * @var CI_Controller CI instance reference holder
@@ -131,6 +131,41 @@ class ezlogin_lib
     }
 
     /**
+     * Automatic login user form cookie value return false if no valid cookie information found and auto login faild
+     * @access private
+     * @return bool
+     */
+    function auto_login(){
+        if ($cookie = get_cookie($this->CI->config->item('autologin_cookie_name', 'ez_rbac'), TRUE)) {
+            $data = unserialize($cookie);
+            if (isset($data['key']) AND isset($data['user_id'])) {
+
+                $this->CI->load->model('user_autologin');
+                if (!is_null($user = $this->CI->user_autologin->get($data['user_id'], md5($data['key'])))) {
+
+                    // Login user
+                    $this->CI->session->set_userdata(array(
+                        'user_id'	=> $user->id,
+                        'user_email'	=> $user->email,
+                        'access_role'	=> $user->user_role_id,
+                    ));
+
+                    // Renew users cookie to prevent it from expiring
+                    set_cookie(array(
+                        'name' 		=> $this->CI->config->item('autologin_cookie_name', 'ez_rbac'),
+                        'value'		=> $cookie,
+                        'expire'	=> $this->CI->config->item('autologin_cookie_life', 'ez_rbac'),
+                    ));
+
+                    $this->CI->load->model('ezuser');
+                    $this->CI->ezuser->update_login_info($user->id);
+                    return TRUE;
+                }
+            }
+        }
+    }
+
+    /**
      * Logout user from the site
      *
      * @return	void
@@ -139,9 +174,8 @@ class ezlogin_lib
     {
         $this->delete_autologin();
 
-        // See http://codeigniter.com/forums/viewreply/662369/ as the reason for the next line
+        //making sure though the session data exist through the script execution  it must not be valid after logout
         $this->CI->session->set_userdata(array('user_id' => '', 'user_email' => '', 'access_role' => ''));
-
         $this->CI->session->sess_destroy();
     }
 
@@ -163,6 +197,9 @@ class ezlogin_lib
         }
     }
 
+    public function logout_link(){
+        return $this->CI->router->default_controller."/index/logout";
+    }
 
     /**
      *@TODO Implement the recover password feature
@@ -171,5 +208,5 @@ class ezlogin_lib
         die("recover_password: feature is comming soon");
     }
 }
-/* End of file ezlogin_lib.php */
-/* Location: ./ezRbac/libraries/ezlogin_lib.php */
+/* End of file ezlogin.php */
+/* Location: ./ezRbac/libraries/ezlogin.php */

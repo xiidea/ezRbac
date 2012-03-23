@@ -4,9 +4,9 @@
  * AccessMap class file. 
  * A Simple Access Control Mapping Library
  *
- * @version	1.0
+ * @version	1.1
  * @package ezRbac
- * @since ezRbac v 0.1
+ * @since ezRbac v 0.2
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -56,16 +56,13 @@ class AccessMap{
         $this->CI = & get_instance();
 		$controller=strtolower($param["controller"]);
 
-        //Try to Auto Login
-        $this->auto_login();
-
         if($this->isGuest()){   //Nothing to do but handle login
             $action= $this->CI->input->post("action")?:'login';
-            $this->CI->load->library('ezlogin_lib');
             if(!($action=='login' || $action=='recover_password')){ //This usefull for wrong action parameter
                 $action='login';
             }
-            $this->CI->ezlogin_lib->$action();
+
+            $this->CI->ezlogin->$action();
         }
 
         $this->initialize($controller);
@@ -95,46 +92,6 @@ class AccessMap{
     }
 
     /**
-     * Automatic login user form cookie value return false if no valid cookie information found and auto login faild
-     * @access private
-     * @return bool
-     */
-    private function auto_login(){
-        if ($this->isGuest()) {			// not logged in (as any user)
-            if ($cookie = get_cookie($this->CI->config->item('autologin_cookie_name', 'ez_rbac'), TRUE)) {
-
-                $data = unserialize($cookie);
-
-                if (isset($data['key']) AND isset($data['user_id'])) {
-
-                    $this->CI->load->model('user_autologin');
-                    if (!is_null($user = $this->CI->user_autologin->get($data['user_id'], md5($data['key'])))) {
-
-                        // Login user
-                        $this->CI->session->set_userdata(array(
-                            'user_id'	=> $user->id,
-                            'user_email'	=> $user->email,
-                            'access_role'	=> $user->user_role_id,
-                        ));
-
-                        // Renew users cookie to prevent it from expiring
-                        set_cookie(array(
-                            'name' 		=> $this->CI->config->item('autologin_cookie_name', 'ez_rbac'),
-                            'value'		=> $cookie,
-                            'expire'	=> $this->CI->config->item('autologin_cookie_life', 'ez_rbac'),
-                        ));
-
-                        $this->CI->load->model('ezuser');
-                        $this->CI->ezuser->update_login_info($user->id);
-                        return TRUE;
-                    }
-                }
-            }
-        }
-        return FALSE;
-    }
-
-    /**
      * return the access_map array
      * @access Public
      * @return array
@@ -149,7 +106,12 @@ class AccessMap{
      * @return bool
      */
     function isGuest(){
-        return (!$this->CI->session->userdata('user_id'));
+        if (!$this->CI->session->userdata('user_id')){
+           //try to auto login first
+            $this->CI->load->library('ezlogin');
+            return !$this->CI->ezlogin->auto_login();
+        }
+        return FALSE;
     }
 
 	/**

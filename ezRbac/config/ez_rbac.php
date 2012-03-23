@@ -1,13 +1,13 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 //List of public controller which access will not be checked by our library
-$config['public_controller']=array('login','dashboard','welcome');
+$config['public_controller']=array('welcome');
 
 // Message to return while performing an ajax request
 $config['ajax_no_permission_msg']="You do not have permission to perform this action!";
 
 //The default access for a unknown method TRUE for give access denied otherwise
-$config['default_access']=TRUE;
+$config['default_access']=FALSE;
 
 //Access Map array Used by the system
 $config['default_access_map']=array("publish","delete","edit","create","view");;

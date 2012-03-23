@@ -4,9 +4,9 @@
  * ezRbacHook class file.
  * A Simple Codeigniter Hook To handle all controller request
  *
- * @version	1.0
+ * @version	1.1
  * @package ezRbac
- * @since ezRbac v 0.1
+ * @since ezRbac v 0.2
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -59,7 +59,8 @@ private
                                  $this->CI->config->item('public_controller', 'ez_rbac'):
                                  array();
 
-
+        //Load the own uri library
+        $this->CI->load->library('ezuri');
 	}
 
     /**
@@ -90,8 +91,8 @@ private
                 exit;
                 break;
            case 'logout':
-               $this->CI->load->library('ezlogin_lib');
-               $this->CI->ezlogin_lib->logout();
+               $this->CI->load->library('ezlogin');
+               $this->CI->ezlogin->logout();
                redirect($this->CI->router->default_controller);
                break;
         }
