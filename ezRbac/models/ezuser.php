@@ -17,12 +17,19 @@
 class Ezuser extends  CI_Model {
 
     private $CI;
+
+    private $_table_name;
+
+    private $_user_table_name;
 	
 	function __construct()
     {
         // Call the Model constructor
         parent::__construct();
         $this->CI=& get_instance();
+
+        $this->_table_name=$this->CI->config->item('auto_login_table','ez_rbac');
+        $this->_user_table_name=$this->CI->config->item('user_table','ez_rbac');
     }
 
     /**
@@ -35,7 +42,7 @@ class Ezuser extends  CI_Model {
     {
         $this->db->where('LOWER(email)=', strtolower($email));
 
-        $query = $this->db->get("system_users");
+        $query = $this->db->get($this->_user_table_name);
         if ($query->num_rows() == 1) return $query->row();
         return NULL;
     }
@@ -51,17 +58,15 @@ class Ezuser extends  CI_Model {
     {
         $this->db->set('reset_request_code', NULL);
         $this->db->set('reset_request_time', NULL);
-        $this->db->set('reset_request_expiry', NULL);
         $this->db->set('reset_request_ip', NULL);
         $this->db->set('new_email', NULL);
         $this->db->set('new_password', NULL);
         $this->db->set('verification_status', 1);
-
         $this->db->set('last_login_ip', $this->CI->input->ip_address());
         $this->db->set('last_login', date('Y-m-d H:i:s'));
 
         $this->db->where('id', $user_id);
-        $this->db->update('system_users');
+        $this->db->update($this->_user_table_name);
     }
 
     public function requestPassword($user_id){
@@ -69,7 +74,7 @@ class Ezuser extends  CI_Model {
         $data['reset_request_time']=date('Y-m-d H:i:s');
         $data['reset_request_ip']=ip2long($this->CI->input->ip_address());
         $this->db->where('id',$user_id);
-        $this->db->update('system_users',$data);
+        $this->db->update($this->_user_table_name,$data);
         return md5($data['reset_request_code'].$data['reset_request_time'].$data['reset_request_ip']);
     }
 
@@ -82,7 +87,7 @@ class Ezuser extends  CI_Model {
         $this->db->set('reset_request_ip', NULL);
         $this->db->set('salt', $salt);
         $this->db->set('password', $password);
-        $this->db->update('system_users');
+        $this->db->update($this->_user_table_name);
     }
 
     /**

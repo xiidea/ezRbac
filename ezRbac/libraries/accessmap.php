@@ -128,15 +128,13 @@ class AccessMap{
 		}
 		$access_role = $this->CI->session->userdata('access_role');
 
-        $this->CI->db->select('permission');
-        $this->CI->db->where('user_role_id',$access_role);
-        $this->CI->db->where('controller',$controller);
-		$user_access=$this->CI->db->get('user_access_map');
-		$row=$user_access->result();
-        if(!$row){
+        $this->CI->load->model('user_access_map');
+        $permission=$this->CI->user_access_map->get_permission($access_role,$controller);
+
+        if(is_null($permission)){
             return $this->_default_access;
         }
-		return $this->validate($row[0]->permission);
+		return $this->validate($permission);
 	}
 	
 	/**

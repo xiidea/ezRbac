@@ -26,7 +26,7 @@ class User_Autologin extends CI_Model
 		parent::__construct();
         $CI=& get_instance();
         $this->_table_name=$CI->config->item('auto_login_table','ez_rbac');
-        $this->_user_table_name=$CI->config->item('system_users','ez_rbac');
+        $this->_user_table_name=$CI->config->item('user_table','ez_rbac');
 	}
 
 	/**
