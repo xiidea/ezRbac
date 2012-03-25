@@ -96,7 +96,7 @@ class ezlogin
     private function view_login_form(){
         $data['form_error'] = $this->error;
         echo $this->CI->load->view('login/index', $data,true);
-        exit;
+        $this->end_now();
     }
 
     /**
@@ -106,7 +106,8 @@ class ezlogin
     private function view_password_reset_form(){
         $data['form_error'] = $this->error;
         echo $this->CI->load->view('login/reset', $data,true);
-        exit;
+
+        $this->end_now();
     }
 
     /**
@@ -116,7 +117,7 @@ class ezlogin
     private function view_password_reset_message(){
         $data['reset_success'] = true;
         echo $this->CI->load->view('login/reset', $data,true);
-        exit;
+        $this->end_now();
     }
 
     /**
@@ -273,7 +274,7 @@ class ezlogin
             $data['reset_email_confirm']=true;
             $data['form_error']='';
             echo $this->CI->load->view('login/index', $data,true);
-            exit;
+            $this->end_now();
         }
         $this->view_login_form();
     }
@@ -354,6 +355,16 @@ class ezlogin
         $date->modify("+2 day");
         return (md5($user->reset_request_code.$user->reset_request_time.$user->reset_request_ip)===$key && $date>new DateTime());
     }
+
+    //trrminate the execution within the script! we will be stop here and
+    // further execution will be stoped
+    // I have not found anything to detect the exit , so doing it manually!!
+    // Hope the pice of code will not be necessary when i figure it out!!!
+    private function end_now(){
+        $this->CI->we_are_done=true;
+        exit;
+    }
+
 }
 /* End of file ezlogin.php */
 /* Location: ./ezRbac/libraries/ezlogin.php */

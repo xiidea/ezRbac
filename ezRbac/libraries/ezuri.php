@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * ezuri class
  * A simple class to create and parse package specifiq requests
@@ -38,7 +38,7 @@ class ezuri
         $this->CI = & get_instance();
         $this->_manage_url=$this->CI->config->item('ezrbac_url','ez_rbac');
         $this->_use_routing=$this->CI->config->item('use_routing','ez_rbac');
-        $this->_base_url=$this->_use_routing?$this->_manage_url:$this->CI->router->default_controller."/index";
+        $this->_base_url=$this->_use_routing?$this->_manage_url:$this->CI->router->default_controller."/index/$this->_manage_url";
     }
 
     public function isRbacUrl(){
@@ -51,6 +51,9 @@ class ezuri
     }
 
     public function RbacParam(){
+        if(empty($this->_rbac_param)){  //Assuming the is Rbac never been called so call it first
+            $this->isRbacUrl();
+        }
         return $this->_rbac_param;
     }
 
@@ -60,6 +63,20 @@ class ezuri
 
     public function RbacUrl($uri=""){
         return site_url($this->_base_url."/$uri");
+    }
+
+    public function ruri_string($separator="/"){
+        return  join($separator,array_slice( $this->CI->uri->rsegment_array(), 3));
+    }
+
+    public function assets_url($uri=""){
+        if($uri=="")
+            return false;
+
+        if($this->CI->config->item('use_assets_within_package','ez_rbac')){
+            return base_url($this->_base_url."/assets/".$uri);
+        }
+        return base_url($this->CI->config->item('assets_base_directory','ez_rbac')."/$uri");
     }
 }
 /* End of file ezlogin.php */

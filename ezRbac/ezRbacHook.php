@@ -50,8 +50,13 @@ private
         //Load al required core library
         $this->load_libraries();
 
+        //Make a public variable to controller so we can access it from any where within script execution!
+        $this->CI->ezRbacPath=dirname(__FILE__);
+
+        $library_directory=basename($this->CI->ezRbacPath);
+
         //We should use our package resource!
-        $this->CI->load->add_package_path(APPPATH.'third_party/ezRbac/');
+        $this->CI->load->add_package_path(APPPATH."third_party/$library_directory/");
         $this->CI->config->load('ez_rbac', TRUE, TRUE);
 
         //Get list of public controller from the config file
@@ -82,12 +87,15 @@ private
      */
     private function manage_access(){
         switch($this->CI->ezuri->isRbacUrl()){
+            case FALSE:
+                //Its not a rbac url so nothing to do
+                return true;
             case 'manage':
                 //$this->CI->load->library('ezmanage');
                // $uriparam= $this->CI->uri->uri_to_assoc($n+1);
               //@TODO Implement Access Controll management library
                 echo "manage my access control system";
-                exit;
+                $this->end_now();
                 break;
            case 'resetpassword':
                $this->CI->load->library('ezlogin');
@@ -97,6 +105,12 @@ private
                $this->CI->ezlogin->logout();
                redirect($this->CI->router->default_controller);
                break;
+           case 'assets':
+                $this->CI->load->library('ezmedia');
+           default:
+                //its a invalid rbac request show error
+                show_404();
+                break;
         }
     }
 
@@ -165,12 +179,29 @@ private
         $this->CI->load->library(array('session','sha1','encrypt','form_validation'));
     }
 
+    //trrminate the execution within the script! we will be stop here and
+    // further execution will be stoped
+    // I have not found anything to detect the exit , so doing it manually!!
+    // Hope the pice of code will not be necessary when i figure it out!!!
+    private function end_now(){
+        $this->CI->we_are_done=true;
+        exit;
+    }
+
     /**
-     * Dont forget to remove the package path after finishing everything.
+     * Doing all cleanup stuf
+     * We haven't forgot to remove the package path after finishing everything!.
      * We do not need to load thirdparty resources anymore!
      */
     function __destruct(){
         $this->CI->load->remove_package_path(APPPATH.'third_party/ezRbac/');
+        if(isset($this->CI->we_are_done)){
+            if (class_exists('CI_DB') AND isset($this->CI->db))
+            {
+               $this->CI->db->close();
+            }
+          $this->CI=null;
+        }
     }
 }
 

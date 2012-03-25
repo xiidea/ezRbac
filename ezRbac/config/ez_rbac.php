@@ -48,12 +48,22 @@ $config['enable_ezrbac_gui']=true;
 
 //ezrbac specific url identifier
 $config['ezrbac_url']='rbac';
+//This configuration value tell the library from where it should use the resource
+//if set to true the js/css/images used in the library views will be served from the
+//assets directory in package (helpful for quick setup)
+//for advance user it will be better to copy the contens of assets directory in a webaccessable location
+//and set the $config['assets_base_directory']='the/relative/path/of/assets/directory/from/root'
+$config['use_assets_within_package']=true;
+
+//Optional only used if you set the the $config['use_assets_within_package']=false
+//then set the relative path of assets directory from root
+$config['assets_base_directory']='assets';
 
 //enable clean url for management interface by adding routing rule
 // if $config['ezrbac_url']='rbac' then
 // add $route['^(rbac)/(.+)$'] =$route['default_controller']."/index/rbac/$2";
 // and set the value to true
-$config['use_routing']=true;
+$config['use_routing']=false;
 
 
 /* End of file ez_rbac.php */
