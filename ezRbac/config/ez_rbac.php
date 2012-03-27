@@ -41,10 +41,12 @@ $config['access_map_table']="user_access_map";
 
 
 //@TODO Required When Implemented the Rbac Management system
-// Password to access management interface of ACL
-$config['ezrbac_password']="hardtoremember";
 //Enable or disable the management interface
 $config['enable_ezrbac_gui']=true;
+// Url identifier for ezrbac gui interface access
+$config['ezrbac_gui_url']="gui";
+// Password to access management interface of ACL
+$config['ezrbac_password']="hardtoremember";
 
 //ezrbac specific url identifier
 $config['ezrbac_url']='rbac';

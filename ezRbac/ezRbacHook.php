@@ -86,17 +86,11 @@ private
      * This method will handle all library specific url like namege rbac or logout
      */
     private function manage_access(){
-        switch($this->CI->ezuri->isRbacUrl()){
+        $isRbacUrl=$this->CI->ezuri->isRbacUrl();
+        switch($isRbacUrl){
             case FALSE:
-                //Its not a rbac url so nothing to do
+                //Its not a rbac url so nothing to do or worry about
                 return true;
-            case 'manage':
-                //$this->CI->load->library('ezmanage');
-               // $uriparam= $this->CI->uri->uri_to_assoc($n+1);
-              //@TODO Implement Access Controll management library
-                echo "manage my access control system";
-                $this->end_now();
-                break;
            case 'resetpassword':
                $this->CI->load->library('ezlogin');
                $this->CI->ezlogin->resetPassword($this->CI->ezuri->RbacParam());
@@ -108,6 +102,15 @@ private
            case 'assets':
                 $this->CI->load->library('ezmedia');
            default:
+               if($this->CI->config->item('ezrbac_gui_url', 'ez_rbac')==$isRbacUrl){ //Is the url for manageing guii
+                    //check if the setting allows us to access this or not
+                   if($this->CI->config->item('enable_ezrbac_gui', 'ez_rbac')){
+                       //So we are all set to go!!
+                       $this->CI->load->library('ezmanage',$this->CI->ezuri->rsegment_array(1));
+                       $this->end_now();
+                   }
+
+               }
                 //its a invalid rbac request show error
                 show_404();
                 break;

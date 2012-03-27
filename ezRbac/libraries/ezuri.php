@@ -50,6 +50,7 @@ class ezuri
         return FALSE;
     }
 
+
     public function RbacParam(){
         if(empty($this->_rbac_param)){  //Assuming the is Rbac never been called so call it first
             $this->isRbacUrl();
@@ -57,16 +58,24 @@ class ezuri
         return $this->_rbac_param;
     }
 
+
     public function logout(){
         return $this->_base_url."/logout";
     }
 
-    public function RbacUrl($uri=""){
-        return site_url($this->_base_url."/$uri");
+    public function RbacUri($uri=""){
+        return $this->_base_url."/$uri";
     }
 
+    public function RbacUrl($uri=""){
+        return site_url($this->RbacUri($uri));
+    }
+
+    public function rsegment_array($n=0){
+        return array_slice( $this->CI->uri->rsegment_array(), 3+$n);
+    }
     public function ruri_string($separator="/"){
-        return  join($separator,array_slice( $this->CI->uri->rsegment_array(), 3));
+        return  join($separator,$this->rsegment_array());
     }
 
     public function assets_url($uri=""){
