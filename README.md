@@ -8,6 +8,7 @@ Key Features
 * Easy to integrate with Codeigniter Application
 * User Login system with password recovery integrated
 * Easy To Customize!!!
+* Integrated Access Control Management Interface
 * Coming many more....!!!
  
 
@@ -22,7 +23,7 @@ Installation of this library is simple 3 steps
 
 1. Put **ezRbac** in the **third_party** Directory of your application
 
-2. Run the sqls in scheme directory or create three tables in your database manually.
+2. Run the sqls in schema directory or create three tables in your database manually.
 
 3. Add a hook in **./application/config/hooks.php**
 

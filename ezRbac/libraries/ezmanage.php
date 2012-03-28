@@ -55,7 +55,6 @@ class ezmanage
         }
 
         echo $this->CI->load->view('manage/login', array('form_error'=>'incorrect password! try again'),true);
-        return;
     }
 
     private function process_login(){
@@ -88,8 +87,14 @@ class ezmanage
         if(!$this->isLogedin()){
             redirect($this->uri('login'));
         }
-        echo "access control list <br />";
-        echo anchor($this->uri('logout'),'Logout');
+
+        $this->CI->load->model('ezcontrollers');
+        $data=array(
+            'logout_url'=>anchor($this->uri('logout'),'Logout')
+        );
+        echo $this->CI->load->view('manage/acl', $data,true);
+        //echo "access control list <br />";
+       // echo anchor($this->uri('logout'),'Logout');
     }
 
 
