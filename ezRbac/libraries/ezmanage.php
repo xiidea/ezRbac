@@ -18,7 +18,9 @@ class ezmanage
      */
     private $CI;
 
-    private $valid_action=array('login','logout','acl');
+    private $_valid_action=array('login','logout','acl');
+
+    private $_request_params=array();
 
 
     function __construct($param)
@@ -28,9 +30,10 @@ class ezmanage
            $this->login();
            return;
        }
-       if(!in_array($param[0],$this->valid_action)){
+       if(!in_array($param[0],$this->_valid_action)){
            show_404();
        }
+       $this->_request_params=array_splice($param,1);
        $this->$param[0]();
     }
 
@@ -82,20 +85,50 @@ class ezmanage
         return site_url($this->uri($uri));
     }
 
+    private function acl_ajax($param){
+
+
+    }
 
     private function acl(){
         if(!$this->isLogedin()){
             redirect($this->uri('login'));
         }
 
-        $this->CI->load->model('ezcontrollers');
+        //After this level we onlly allowed ajax call!!
+        if(!empty($this->_request_params) && !$this->CI->input->is_ajax_request()){
+            show_404();
+        }
+
+        //Handle ajax request
+        if(!empty($this->_request_params)){
+            $this->acl_ajax($this->_request_params);
+            return;
+        }
+
+        //First time come here!! Visit our interface!!!
+        $this->CI->load->model('manage/ezcontrollers');
+        //$this->CI->load->model('user_access_map');
+        //Get all controller list except public controllers
+        $clist=array_diff($this->CI->ezcontrollers->get_controllers(),$this->CI->config->item('public_controller', 'ez_rbac'));
+
+        $amap_from_db=$this->CI->user_access_map->get_permission(1);
+
+        $this->dump_me($clist,$amap_from_db,$this->_request_params);
         $data=array(
-            'logout_url'=>anchor($this->uri('logout'),'Logout')
+            'logout_url'=>anchor($this->uri('logout'),'Logout'),
+            'controller_list'=>$clist
         );
         echo $this->CI->load->view('manage/acl', $data,true);
         //echo "access control list <br />";
        // echo anchor($this->uri('logout'),'Logout');
     }
 
+    private function dump_me(){
+        echo "<pre>";
+        var_dump(func_get_args());
+        echo "</pre>";
+
+    }
 
 }

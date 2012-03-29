@@ -18,13 +18,15 @@ class ezcontrollers extends  CI_Model {
 
     private $CI;
 
+    private $_controllers_basepath;
+
 
 	function __construct()
     {
         // Call the Model constructor
         parent::__construct();
         $this->CI=& get_instance();
-
+        $this->_controllers_basepath=realpath(APPPATH.DIRECTORY_SEPARATOR."controllers");
     }
 
     /**
@@ -47,22 +49,48 @@ class ezcontrollers extends  CI_Model {
         return NULL;
     }
 
-    //NNNIIIinnnjaaa::
-    //array of files without directories... optionally filtered by extension
-    function get_list(){
-        die(APPPATH);
-        $d="";
-        $x=".php";
-
-        foreach(array_diff(scandir($d),array('.','..')) as $f)
-            if(is_file($d.'/'.$f)&&(($x)?preg_match($x.'$',$f,$match):1)){
-                $l[]=$f;
-                print_r($match);
+    private function scan_for_controller($d="",$pre=""){
+        $files = array();
+        $dir=array();
+        $more_files=array();
+        foreach (new DirectoryIterator($d) as $file) {
+                if($file->isDir()){
+                    if(!$file->isDot()){
+                        $dir[] =(string) $file;
+                    }
+                }else{
+                   (preg_match('/^.*\.(php)$/i', $file)) AND $files[] = "$pre".$file->getBasename(".php");
+                }
+        }
+        if(!empty($dir)){
+            foreach($dir as $dname){
+                $more_files= array_merge($this->scan_for_controller($d.DIRECTORY_SEPARATOR.$dname,"$dname/"),$more_files);
             }
-       // return $l;
+
+        }
+        return array_merge($files,$more_files);
     }
+
+
+    function get_controllers(){
+        //Get first set of controllers!
+        $all_list=$this->scan_for_controller($this->_controllers_basepath);
+        //Ommit all public controllers! we do not need to think about those!!
+        return array_diff($all_list,$this->CI->config->item('public_controller', 'ez_rbac'));
+    }
+
+    /**
+     * Remove all access_role info which controller is not available
+     *
+     * @param array $existing
+     */
+    public function clear_garbage($existing=array()){
+        $this->db->where_not_in('controller',$existing);
+        $this->db->delete('user_access_map');
+    }
+
 }
 
 
-/* End of file user_access_map.php */
-/* Location: ./ezRbac/models/user_access_map.php */
+/* End of file ezcontrollers.php */
+/* Location: ./ezRbac/models/manage/ezcontrollers.php */

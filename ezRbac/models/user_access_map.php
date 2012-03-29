@@ -31,24 +31,42 @@ class user_access_map extends  CI_Model {
     }
 
     /**
-     * Get user record by email
+     * Get permission info by access_role and controller
      *
-     * @param	string
-     * @return	object
+     * @param string $access_role
+     * @param string $controller
+     * @return    object
      */
-    function get_permission($access_role,$controller)
+    function get_permission($access_role,$controller="")
     {
-        $this->db->select('permission');
+        //Default return value
+        $ret=array();
+        $this->db->select('permission,controller');
         $this->db->where('user_role_id',$access_role);
-        $this->db->where('controller',$controller);
+        if($controller!=""){
+            $this->db->where('controller',$controller);
+            $ret =NULL;
+        }
 
         $query = $this->db->get($this->_table_name);
-        if ($query->num_rows() == 1) {
+        if ($query->num_rows() > 0) {
+            if($controller==""){    //Get all permission info for selected user
+                $output=array();
+                foreach ($query->result() as $prow) {
+                    $output[$prow->controller]=$prow->permission;
+                }
+                return $output;
+            }
             $row=$query->row();
             return $row->permission;
         }
-        return NULL;
+        return $ret;
     }
+
+
+
+
+
 }
 
 

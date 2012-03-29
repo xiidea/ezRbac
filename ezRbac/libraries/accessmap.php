@@ -199,12 +199,9 @@ class AccessMap{
  *
  * or
  *
- * if($b->canPublish(false)){
+ * if($b->canPublish()){
  *  echo "you can publish";
  * }
- *
- * or only
- * $b->canPublish() //Redirect to $redirect_path if have no publish previlage
  */
 
 

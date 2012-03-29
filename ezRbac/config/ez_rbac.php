@@ -49,7 +49,7 @@ $config['ezrbac_gui_url']="gui";
 $config['ezrbac_password']="hardtoremember";
 
 //ezrbac specific url identifier
-$config['ezrbac_url']='rbac';
+$config['ezrbac_url']='rb';
 //This configuration value tell the library from where it should use the resource
 //if set to true the js/css/images used in the library views will be served from the
 //assets directory in package (helpful for quick setup)
