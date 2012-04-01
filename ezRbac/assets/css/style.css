@@ -331,6 +331,10 @@ form .msg_box label {
 .clearfix, .container {
     display: block;
 }
+.clear{
+	 clear: both;
+}
+
 .container {
     margin: 0 auto;
     width: 950px;
@@ -375,5 +379,9 @@ div.form label {
     font-size: 0.9em;
     font-weight: bold;
 	float:left;
-	width:200px
+	width:150px;
+	cursor:pointer
+}
+div.form label.secondlevel{
+	margin-left:150px;	
 }

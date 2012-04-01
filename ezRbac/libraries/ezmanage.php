@@ -112,9 +112,12 @@ class ezmanage
         //Get all controller list except public controllers
         $clist=array_diff($this->CI->ezcontrollers->get_controllers(),$this->CI->config->item('public_controller', 'ez_rbac'));
 
-        $amap_from_db=$this->CI->user_access_map->get_permission(1);
+       // $amap_from_db=$this->CI->user_access_map->get_permission(1);
 
-        $this->dump_me($clist,$amap_from_db,$this->_request_params);
+      //  $this->dump_me($clist,$amap_from_db,$this->_request_params);
+
+        $this->CI->load->library('accessmap');
+
         $data=array(
             'logout_url'=>anchor($this->uri('logout'),'Logout'),
             'controller_list'=>$clist,

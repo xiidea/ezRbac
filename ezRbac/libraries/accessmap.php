@@ -11,7 +11,7 @@
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  */
-class AccessMap extends Access{
+class AccessMap{
 
  private
 
@@ -41,7 +41,7 @@ class AccessMap extends Access{
 	 * @var Array sets the access values after parsing the access string
 	 */
 	$_access_val=array(),
-	
+
 	/**
 	 * @var mix cache the access details value in array after 1st time parsing
 	 */
@@ -52,9 +52,10 @@ class AccessMap extends Access{
      * @access Public
      * @param $param paremeter array get the controller name
      */
-    function __construct($param){
+    function __construct($param=array()){
         $this->CI = & get_instance();
-		$controller=strtolower($param["controller"]);
+
+        $controller=(isset($param["controller"]))?strtolower($param["controller"]):false;
 
         if($this->isGuest()){   //Nothing to do but handle login
             $action= $this->CI->input->post("action")?$this->CI->input->post("action"):'login';
@@ -64,17 +65,16 @@ class AccessMap extends Access{
 
             $this->CI->ezlogin->$action();
         }
-
-        $this->initialize($controller);
-
+        ($controller) AND $this->initialize($controller);
 	}
 
     /**
      * Initialize the access checking variables
      * @access private
      * @param $controller
+     * @param bool $access_role
      */
-    private function initialize($controller){
+    private function initialize($controller,$access_role=false){
         $default_access_map=$this->CI->config->item('default_access_map', 'ez_rbac');
         if($default_access_map){
             if(is_array($default_access_map)&& !empty($default_access_map))
@@ -86,7 +86,7 @@ class AccessMap extends Access{
 
         $this->_access_map_array_size=count($this->_access_arr);
 
-        $access_str=$this->get_access_string($controller);
+        $access_str=$this->get_access_string($controller,$access_role);
         $access_val=$this->validate($access_str);
         $this->_access_val=str_split($access_val);
     }
@@ -114,19 +114,23 @@ class AccessMap extends Access{
         return FALSE;
     }
 
-	/**
-	 * Return Binary string in a acceptable format
-	 * @access private 
-	 * @param String Controller Name
-	 * @return String. Binary string in a acceptable format
-	 */	
-	private function get_access_string($controller){
+    /**
+     * Return Binary string in a acceptable format
+     * @access private
+     * @param String Controller Name
+     * @param bool $access_role
+     * @return String. Binary string in a acceptable format
+     */
+	private function get_access_string($controller,$access_role=false){
 
-		if(! $this->CI->session->userdata('access_role'))
+		if(!$access_role && ! $this->CI->session->userdata('access_role'))
 		{
 			return FALSE;
 		}
-		$access_role = $this->CI->session->userdata('access_role');
+
+		if(!$access_role){
+            $access_role = $this->CI->session->userdata('access_role');
+        }
 
         $this->CI->load->model('user_access_map');
         $permission=$this->CI->user_access_map->get_permission($access_role,$controller);
@@ -160,7 +164,7 @@ class AccessMap extends Access{
 	 * @access private
 	 * @param String
 	 * @return String. Binary string in a acceptable format
-	 */	
+	 */
 	private function validate($access_str){
 		return str_pad($access_str,$this->_access_map_array_size,0) & str_repeat('1',$this->_access_map_array_size);
 	}
