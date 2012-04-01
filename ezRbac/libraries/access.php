@@ -1,19 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * AccessMap class file. 
- * A Simple Access Control Mapping Library
+ * Access class file.
+ * A Base Class or core class for access control check
  *
- * @version	1.1
+ * @version	1.0
  * @package ezRbac
  * @since ezRbac v 0.2
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  */
-class AccessMap extends Access{
+class Access{
 
- private
+ protected
 
     /**
      * @var CI_Controller CI instance reference holder

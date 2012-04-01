@@ -47,9 +47,10 @@ $config['enable_ezrbac_gui']=true;
 $config['ezrbac_gui_url']="gui";
 // Password to access management interface of ACL
 $config['ezrbac_password']="hardtoremember";
+$config['ezrbac_password']="123456";
 
 //ezrbac specific url identifier
-$config['ezrbac_url']='rb';
+$config['ezrbac_url']='rbac';
 //This configuration value tell the library from where it should use the resource
 //if set to true the js/css/images used in the library views will be served from the
 //assets directory in package (helpful for quick setup)

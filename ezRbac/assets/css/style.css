@@ -39,6 +39,18 @@ h3 {
 	font-size: 18px
 }
 
+h1 {
+    color: #666666;
+    font-size: 1.6em;
+	line-height: 1;
+    margin-bottom: 0.5em;
+
+}
+
+p {
+    margin: 0 0 1.5em;
+}
+
 a {
 	text-decoration: none;
 	color: #21759B
@@ -349,4 +361,19 @@ form .msg_box label {
     margin: 0 auto;
     text-align: center;
     width: 950px;
+}
+
+div.form .row {
+    margin: 5px 0;
+}
+
+div.form input, div.form textarea, div.form select {
+    margin: 0.2em 0 0.5em;
+}
+div.form label {
+    display: block;
+    font-size: 0.9em;
+    font-weight: bold;
+	float:left;
+	width:200px
 }

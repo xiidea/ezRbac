@@ -20,6 +20,8 @@ class user_access_map extends  CI_Model {
 
     private $_table_name;
 
+    private $_user_role_table;
+
 
 	function __construct()
     {
@@ -28,6 +30,7 @@ class user_access_map extends  CI_Model {
         $this->CI=& get_instance();
 
         $this->_table_name=$this->CI->config->item('access_map_table','ez_rbac');
+        $this->_user_role_table=$this->CI->config->item('user_role_table','ez_rbac');
     }
 
     /**
@@ -64,9 +67,13 @@ class user_access_map extends  CI_Model {
     }
 
 
-
-
-
+    function get_role_list(){
+        $query = $this->db->get($this->_user_role_table);
+        if ($query->num_rows() > 0) {
+            return $query;
+        }
+        return array();
+    }
 }
 
 

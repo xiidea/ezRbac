@@ -106,9 +106,9 @@ class ezmanage
             return;
         }
 
-        //First time come here!! Visit our interface!!!
+        //First time came here!! Visit our interface!!!
         $this->CI->load->model('manage/ezcontrollers');
-        //$this->CI->load->model('user_access_map');
+        $this->CI->load->model('user_access_map');
         //Get all controller list except public controllers
         $clist=array_diff($this->CI->ezcontrollers->get_controllers(),$this->CI->config->item('public_controller', 'ez_rbac'));
 
@@ -117,7 +117,9 @@ class ezmanage
         $this->dump_me($clist,$amap_from_db,$this->_request_params);
         $data=array(
             'logout_url'=>anchor($this->uri('logout'),'Logout'),
-            'controller_list'=>$clist
+            'controller_list'=>$clist,
+            'access_roles'=>$this->CI->user_access_map->get_role_list(),
+            'access_list'=>$this->CI->accessmap->get_access_map()
         );
         echo $this->CI->load->view('manage/acl', $data,true);
         //echo "access control list <br />";
