@@ -57,24 +57,26 @@ class AccessMap{
 
         $controller=(isset($param["controller"]))?strtolower($param["controller"]):false;
 
-        if($this->isGuest()){   //Nothing to do but handle login
-            $action= $this->CI->input->post("action")?$this->CI->input->post("action"):'login';
-            if(!($action=='login' || $action=='recover_password')){ //This usefull for wrong action parameter
-                $action='login';
-            }
+        if($controller){
+            if($this->isGuest()){   //Nothing to do but handle login
+                $action= $this->CI->input->post("action")?$this->CI->input->post("action"):'login';
+                if(!($action=='login' || $action=='recover_password')){ //This usefull for wrong action parameter
+                    $action='login';
+                }
 
-            $this->CI->ezlogin->$action();
+                $this->CI->ezlogin->$action();
+            }
+            $this->initialize($controller);
         }
-        ($controller) AND $this->initialize($controller);
 	}
 
     /**
      * Initialize the access checking variables
-     * @access private
+     * @access public
      * @param $controller
      * @param bool $access_role
      */
-    private function initialize($controller,$access_role=false){
+    public function initialize($controller,$access_role=false){
         $default_access_map=$this->CI->config->item('default_access_map', 'ez_rbac');
         if($default_access_map){
             if(is_array($default_access_map)&& !empty($default_access_map))
@@ -100,6 +102,15 @@ class AccessMap{
         return $this->_access_arr;
     }
 
+   /**
+     * return the _access_val array
+     * @access Public
+     * @return array
+     */
+    function get_access_str(){
+        return $this->_access_val;
+    }
+
     /**
      * check if the access is from any loged in user or not by checking the existance of session data
      * @access Public
@@ -122,9 +133,9 @@ class AccessMap{
      * @return String. Binary string in a acceptable format
      */
 	private function get_access_string($controller,$access_role=false){
-
 		if(!$access_role && ! $this->CI->session->userdata('access_role'))
 		{
+            echo "should not be here";
 			return FALSE;
 		}
 
@@ -161,12 +172,12 @@ class AccessMap{
 	
 	/**
 	 * Return Binary string in a acceptable format
-	 * @access private
+	 * @access public
 	 * @param String
 	 * @return String. Binary string in a acceptable format
 	 */
-	private function validate($access_str){
-		return str_pad($access_str,$this->_access_map_array_size,0) & str_repeat('1',$this->_access_map_array_size);
+	public function validate($access_str){
+		return str_pad($access_str,$this->_access_map_array_size,0,STR_PAD_LEFT) & str_repeat('1',$this->_access_map_array_size);
 	}
 
 	/**

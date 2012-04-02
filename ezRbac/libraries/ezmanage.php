@@ -77,17 +77,30 @@ class ezmanage
         return  $this->CI->session->userdata('rbac_gui_logedin');
     }
 
-    private function uri($uri=""){
+    public function uri($uri=""){
        return $this->CI->ezuri->RbacUri($this->CI->config->item('ezrbac_gui_url', 'ez_rbac')."/$uri");
     }
 
-    private function url($uri=""){
+    public function url($uri=""){
         return site_url($this->uri($uri));
     }
 
     private function acl_ajax($param){
-
-
+        switch ($param[0]){
+            case 'get_permission':
+                $this->CI->accessmap->initialize($this->CI->input->post('controller'),$this->CI->input->post('user_role_id'));
+                echo json_encode($this->CI->accessmap->get_access_str());
+                break;
+            case 'update':
+                $this->CI->load->model('user_access_map');
+                $p= $this->CI->accessmap->validate(decbin(array_sum($_POST['permission'])));
+                $this->CI->user_access_map->set_permission($this->CI->input->post('controller'),$this->CI->input->post('user_role_id'),$p);
+                echo "ok";
+                break;
+            default:
+                //nothing to do
+                return;
+        }
     }
 
     private function acl(){
@@ -99,6 +112,8 @@ class ezmanage
         if(!empty($this->_request_params) && !$this->CI->input->is_ajax_request()){
             show_404();
         }
+
+        $this->CI->load->library('accessmap');
 
         //Handle ajax request
         if(!empty($this->_request_params)){
@@ -116,10 +131,10 @@ class ezmanage
 
       //  $this->dump_me($clist,$amap_from_db,$this->_request_params);
 
-        $this->CI->load->library('accessmap');
+
 
         $data=array(
-            'logout_url'=>anchor($this->uri('logout'),'Logout'),
+            'acl_url'=>$this->url(''),
             'controller_list'=>$clist,
             'access_roles'=>$this->CI->user_access_map->get_role_list(),
             'access_list'=>$this->CI->accessmap->get_access_map()

@@ -356,10 +356,12 @@ class ezlogin
         return (md5($user->reset_request_code.$user->reset_request_time.$user->reset_request_ip)===$key && $date>new DateTime());
     }
 
-    //trrminate the execution within the script! we will be stop here and
-    // further execution will be stoped
-    // I have not found anything to detect the exit , so doing it manually!!
-    // Hope the pice of code will not be necessary when i figure it out!!!
+    /**
+     * trrminate the execution within the script! we will be stop here and
+     * further execution will be stoped
+     * I have not found anything to detect the exit , so doing it manually!!
+     * Hope the pice of code will not be necessary when i figure it out!!!
+     */
     private function end_now(){
         $this->CI->we_are_done=true;
         exit;

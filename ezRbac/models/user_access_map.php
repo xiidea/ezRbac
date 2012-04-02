@@ -66,6 +66,19 @@ class user_access_map extends  CI_Model {
         return $ret;
     }
 
+    function set_permission($controller,$role,$permission){
+        $data['user_role_id']=$role;
+        $data['controller']=$controller;
+        $data['permission']=$permission;
+        $where=array('user_role_id'=>$role,'controller'=>$controller);
+        $query = $this->db->get_where($this->_table_name, $where, 1, 0);
+        if ($query->num_rows() == 0) { //Insert
+            $this->db->insert($this->_table_name, $data);
+            return;
+        }
+        //Existing data so update
+        $this->db->update($this->_table_name, $data,$where);
+    }
 
     function get_role_list(){
         $query = $this->db->get($this->_user_role_table);
