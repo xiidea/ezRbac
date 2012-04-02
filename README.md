@@ -9,12 +9,14 @@ Key Features
 * User Login system with password recovery integrated
 * Easy To Customize!!!
 * Integrated Access Control Management Interface
-* Coming many more....!!!
+* Configurable DB Table name
+* Support Clean Url routing!
+* Coming more....!!!
  
 
 Current Active Version
 ======================
-v 0.2 Under development
+v 0.2 Released!
 
  
 How To Install
@@ -36,10 +38,14 @@ Installation of this library is simple 3 steps
         );
 ```
 
+ezRbac Specific URL
+===================
+
+
 
 Customization
 =============
-Modify the configuration to match with your choice at **./ezRbac/config/ez_rbac.php**
+Modify the configuration to match with your choice at **./ezRbac/config/ez_rbac.php** 
 
 
 Dependencies
