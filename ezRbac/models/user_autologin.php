@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * User_Autologin
+ * User_Autologin model class
  *
  * This model represents user autologin data. It can be used
  * for user verification when user claims his autologin passport.
@@ -16,12 +16,20 @@
  */
 class User_Autologin extends CI_Model
 {
-
+    /**
+     * @var $_table_name store auto_login_table name
+     */
     private $_table_name;
 
+    /**
+     * @var $_user_table_name store the table name of user table
+     */
     private $_user_table_name;
 
-	function __construct()
+    /**
+     * Constructor function
+     */
+    function __construct()
 	{
 		parent::__construct();
         $CI=& get_instance();

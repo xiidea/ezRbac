@@ -15,21 +15,26 @@
  *
  */
 class Ezuser extends  CI_Model {
-
+    /**
+     * @var CI_Controller CI instance reference holder
+     */
     private $CI;
 
+    /**
+     * @var $_table_name store the table name of user table
+     */
     private $_table_name;
 
-    private $_user_table_name;
-	
-	function __construct()
+    /**
+     * constructor function
+     */
+    function __construct()
     {
         // Call the Model constructor
         parent::__construct();
         $this->CI=& get_instance();
 
-        $this->_table_name=$this->CI->config->item('auto_login_table','ez_rbac');
-        $this->_user_table_name=$this->CI->config->item('user_table','ez_rbac');
+        $this->_table_name=$this->CI->config->item('user_table','ez_rbac');
     }
 
     /**
@@ -42,7 +47,7 @@ class Ezuser extends  CI_Model {
     {
         $this->db->where('LOWER(email)=', strtolower($email));
 
-        $query = $this->db->get($this->_user_table_name);
+        $query = $this->db->get($this->_table_name);
         if ($query->num_rows() == 1) return $query->row();
         return NULL;
     }
@@ -66,18 +71,27 @@ class Ezuser extends  CI_Model {
         $this->db->set('last_login', date('Y-m-d H:i:s'));
 
         $this->db->where('id', $user_id);
-        $this->db->update($this->_user_table_name);
+        $this->db->update($this->_table_name);
     }
 
+    /**
+     * Reset user password, create reset request key and return it
+     * @param $user_id
+     * @return string
+     */
     public function requestPassword($user_id){
         $data['reset_request_code']=$this->generateSalt();
         $data['reset_request_time']=date('Y-m-d H:i:s');
         $data['reset_request_ip']=ip2long($this->CI->input->ip_address());
         $this->db->where('id',$user_id);
-        $this->db->update($this->_user_table_name,$data);
+        $this->db->update($this->_table_name,$data);
         return md5($data['reset_request_code'].$data['reset_request_time'].$data['reset_request_ip']);
     }
 
+    /**
+     * Save new password after hashing that
+     * @param $npass
+     */
     public function set_new_password($npass){
         $salt=$this->generateSalt();
         $password=$this->CI->encrypt->sha1($npass.$salt);
@@ -87,7 +101,7 @@ class Ezuser extends  CI_Model {
         $this->db->set('reset_request_ip', NULL);
         $this->db->set('salt', $salt);
         $this->db->set('password', $password);
-        $this->db->update($this->_user_table_name);
+        $this->db->update($this->_table_name);
     }
 
     /**
@@ -100,7 +114,6 @@ class Ezuser extends  CI_Model {
     }
 
 }
-
 
 /* End of file ezuser.php */
 /* Location: ./ezRbac/models/ezuser.php */

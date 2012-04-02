@@ -15,13 +15,21 @@
  *
  */
 class ezcontrollers extends  CI_Model {
-
+    /**
+     * @var CI_Controller CI instance reference holder
+     */
     private $CI;
 
+    /**
+     * @var string Cache base path value of controller directory
+     */
     private $_controllers_basepath;
 
 
-	function __construct()
+    /**
+     * Constructor function
+     */
+    function __construct()
     {
         // Call the Model constructor
         parent::__construct();
@@ -32,8 +40,9 @@ class ezcontrollers extends  CI_Model {
     /**
      * Get user record by email
      *
-     * @param	string
-     * @return	object
+     * @param $access_role
+     * @param $controller
+     * @return    object
      */
     function get_permission($access_role,$controller)
     {
@@ -49,6 +58,11 @@ class ezcontrollers extends  CI_Model {
         return NULL;
     }
 
+    /**
+     * @param string $d directory to search
+     * @param string $pre prepend the directory name to form unique controller name
+     * @return array
+     */
     private function scan_for_controller($d="",$pre=""){
         $files = array();
         $dir=array();
@@ -72,6 +86,10 @@ class ezcontrollers extends  CI_Model {
     }
 
 
+    /**
+     * get the controller list
+     * @return array
+     */
     function get_controllers(){
         //Get first set of controllers!
         $all_list=$this->scan_for_controller($this->_controllers_basepath);

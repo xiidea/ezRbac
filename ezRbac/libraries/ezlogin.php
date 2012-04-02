@@ -368,5 +368,6 @@ class ezlogin
     }
 
 }
+
 /* End of file ezlogin.php */
 /* Location: ./ezRbac/libraries/ezlogin.php */

@@ -182,10 +182,12 @@ private
         $this->CI->load->library(array('session','sha1','encrypt','form_validation'));
     }
 
-    //trrminate the execution within the script! we will be stop here and
-    // further execution will be stoped
-    // I have not found anything to detect the exit , so doing it manually!!
-    // Hope the pice of code will not be necessary when i figure it out!!!
+    /**
+     * trrminate the execution within the script! we will be stop here and
+     * further execution will be stoped
+     * I have not found anything to detect the exit , so doing it manually!!
+     * Hope the pice of code will not be necessary when i figure it out!!!
+     */
     private function end_now(){
         $this->CI->we_are_done=true;
         exit;

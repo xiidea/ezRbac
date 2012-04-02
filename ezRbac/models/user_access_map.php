@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Ezuser
+ * user_access_map model class
  *
  * This model represents user access mapping data. It can be used
  * for manipulation and retriving access previlages information.
@@ -15,15 +15,26 @@
  *
  */
 class user_access_map extends  CI_Model {
-
+    /**
+     * @var CI_Controller CI instance reference holder
+     */
     private $CI;
 
+    /**
+     * @var String $_table_name store access_map_table name
+     */
     private $_table_name;
 
+    /**
+     * @var String $_user_role_table store user_role_table name
+     */
     private $_user_role_table;
 
 
-	function __construct()
+    /**
+     * Constructor Function
+     */
+    function __construct()
     {
         // Call the Model constructor
         parent::__construct();
@@ -66,6 +77,13 @@ class user_access_map extends  CI_Model {
         return $ret;
     }
 
+    /**
+     * Save access permission to database
+     * @param $controller
+     * @param $role
+     * @param $permission
+     * @return mixed
+     */
     function set_permission($controller,$role,$permission){
         $data['user_role_id']=$role;
         $data['controller']=$controller;
@@ -80,6 +98,10 @@ class user_access_map extends  CI_Model {
         $this->db->update($this->_table_name, $data,$where);
     }
 
+    /**
+     * Get all existing user role saved in database
+     * @return array
+     */
     function get_role_list(){
         $query = $this->db->get($this->_user_role_table);
         if ($query->num_rows() > 0) {

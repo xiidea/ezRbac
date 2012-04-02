@@ -18,11 +18,20 @@ class ezmanage
      */
     private $CI;
 
+    /**
+     * @var array list of valid action used for purify the request string!!
+     */
     private $_valid_action=array('login','logout','acl');
 
+    /**
+     * @var array cache the request parameters as array
+     */
     private $_request_params=array();
 
 
+    /**
+     * @param $param the default action
+     */
     function __construct($param)
     {
        $this->CI = & get_instance();
@@ -60,6 +69,10 @@ class ezmanage
         echo $this->CI->load->view('manage/login', array('form_error'=>'incorrect password! try again'),true);
     }
 
+    /**
+     * Process the login for acl management interface validate with password given in configuration file
+     * @return bool
+     */
     private function process_login(){
         if($this->CI->config->item('ezrbac_password', 'ez_rbac')==$this->CI->input->post("password",TRUE)){
             $this->CI->session->set_userdata('rbac_gui_logedin', true);
@@ -68,23 +81,45 @@ class ezmanage
         return false;
     }
 
+    /**
+     * This action used to logout from ACL management interface
+     */
     private function logout(){
         $this->CI->session->set_userdata('rbac_gui_logedin', false);
         redirect($this->uri());
     }
 
+    /**
+     * Check the status of login
+     * @return boolean
+     */
     private function isLogedin(){
         return  $this->CI->session->userdata('rbac_gui_logedin');
     }
 
+    /**
+     * return ACL gui specific uri
+     * @param string $uri
+     * @return mixed
+     */
     public function uri($uri=""){
        return $this->CI->ezuri->RbacUri($this->CI->config->item('ezrbac_gui_url', 'ez_rbac')."/$uri");
     }
 
+    /**
+     * return ACL gui specific URL
+     * @param string $uri
+     * @return mixed
+     */
     public function url($uri=""){
         return site_url($this->uri($uri));
     }
 
+    /**
+     * Handle all cl ajax call!
+     * @param $param
+     * @return mixed
+     */
     private function acl_ajax($param){
         switch ($param[0]){
             case 'get_permission':
@@ -98,11 +133,16 @@ class ezmanage
                 echo "ok";
                 break;
             default:
+                show_404();
                 //nothing to do
                 return;
         }
     }
 
+    /**
+     * ACL main interface
+     * @return mixed
+     */
     private function acl(){
         if(!$this->isLogedin()){
             redirect($this->uri('login'));
@@ -127,12 +167,6 @@ class ezmanage
         //Get all controller list except public controllers
         $clist=array_diff($this->CI->ezcontrollers->get_controllers(),$this->CI->config->item('public_controller', 'ez_rbac'));
 
-       // $amap_from_db=$this->CI->user_access_map->get_permission(1);
-
-      //  $this->dump_me($clist,$amap_from_db,$this->_request_params);
-
-
-
         $data=array(
             'acl_url'=>$this->url(''),
             'controller_list'=>$clist,
@@ -140,15 +174,10 @@ class ezmanage
             'access_list'=>$this->CI->accessmap->get_access_map()
         );
         echo $this->CI->load->view('manage/acl', $data,true);
-        //echo "access control list <br />";
-       // echo anchor($this->uri('logout'),'Logout');
-    }
-
-    private function dump_me(){
-        echo "<pre>";
-        var_dump(func_get_args());
-        echo "</pre>";
 
     }
 
 }
+
+/* End of file ezlogin.php */
+/* Location: ./ezRbac/libraries/ezmanage.php */
