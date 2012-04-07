@@ -58,7 +58,7 @@ class ezmanage
         $this->CI->form_validation->set_rules('password', 'Password', 'required|xss');
         if ($this->CI->form_validation->run() == FALSE){
             $data['form_error'] = validation_errors();
-            echo $this->CI->load->view('manage/login', $data,true);
+            $this->CI->load->view('manage/login', $data);
             return;
         }
 
@@ -66,7 +66,7 @@ class ezmanage
             redirect($this->uri('acl'));
         }
 
-        echo $this->CI->load->view('manage/login', array('form_error'=>'incorrect password! try again'),true);
+        $this->CI->load->view('manage/login', array('form_error'=>'incorrect password! try again'));
     }
 
     /**
@@ -173,8 +173,7 @@ class ezmanage
             'access_roles'=>$this->CI->user_access_map->get_role_list(),
             'access_list'=>$this->CI->accessmap->get_access_map()
         );
-        echo $this->CI->load->view('manage/acl', $data,true);
-
+        $this->CI->load->view('manage/acl', $data);
     }
 
 }

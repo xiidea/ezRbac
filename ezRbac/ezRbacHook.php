@@ -201,6 +201,9 @@ private
     function __destruct(){
         $this->CI->load->remove_package_path(APPPATH.'third_party/ezRbac/');
         if(isset($this->CI->we_are_done)){
+            //The script life time ends here!! We should ensure to end the output object by displaying
+            //or sending headers we set earlier!!
+            $this->CI->output->_display();
             if (class_exists('CI_DB') AND isset($this->CI->db))
             {
                $this->CI->db->close();

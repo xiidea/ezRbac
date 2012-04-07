@@ -95,7 +95,7 @@ class ezlogin
      */
     private function view_login_form(){
         $data['form_error'] = $this->error;
-        echo $this->CI->load->view('login/index', $data,true);
+        $this->CI->load->view('login/index', $data);
         $this->end_now();
     }
 
@@ -105,8 +105,7 @@ class ezlogin
      */
     private function view_password_reset_form(){
         $data['form_error'] = $this->error;
-        echo $this->CI->load->view('login/reset', $data,true);
-
+        $this->CI->load->view('login/reset', $data);
         $this->end_now();
     }
 
@@ -116,7 +115,7 @@ class ezlogin
      */
     private function view_password_reset_message(){
         $data['reset_success'] = true;
-        echo $this->CI->load->view('login/reset', $data,true);
+        $this->CI->load->view('login/reset', $data);
         $this->end_now();
     }
 
@@ -273,7 +272,7 @@ class ezlogin
         if($this->process_recovery($user)){
             $data['reset_email_confirm']=true;
             $data['form_error']='';
-            echo $this->CI->load->view('login/index', $data,true);
+            $this->CI->load->view('login/index', $data);
             $this->end_now();
         }
         $this->view_login_form();

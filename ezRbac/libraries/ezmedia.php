@@ -50,22 +50,28 @@ class ezmedia
                 $if_modified_since = preg_replace('/;.*$/', '', $_SERVER['HTTP_IF_MODIFIED_SINCE']);
                 if ($if_modified_since >= $gmdate_mod)		//Browser have the data
                 {
-                    header('HTTP/1.1 304 Not Modified');  // HTTP/1.1
+                    $this->CI->output->set_header('HTTP/1.1 304 Not Modified');  // HTTP/1.1
+                    //header('HTTP/1.1 304 Not Modified');
                     $this->CI->we_are_done=true;
                     exit();
                 }
             }		//no cache found, so we serve original file
         }else{
-            header("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
-            header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");  // Date in the past
+            $this->CI->output->set_header("Cache-Control: no-cache, must-revalidate");  //Cache-Controle
+            //header("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
+            $this->CI->output->set_header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");  //Date in the past
+           // header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");  // Date in the past
         }
 
         $mime=get_mime_by_extension($file);
 
-        header("Content-type: $mime");
-        header('Last-Modified: '. $gmdate_mod);
-        header('Content-Length: ' . filesize($file));
-        readfile($file);
+        $this->CI->output->set_header("HTTP/1.0 200 OK")
+                         ->set_header("HTTP/1.1 200 OK")
+                         ->set_content_type($mime)
+                         ->set_header('Last-Modified: '. $gmdate_mod)  //Last modified
+                         ->set_header('Content-Length: ' . filesize($file))  //Size of content help browser to monitor progress
+                         ->set_output(file_get_contents($file));
+
     }
 }
 

@@ -164,6 +164,7 @@ button {
 .msg_alert {background:#faf5c8 url(../images/alert_ico.png) no-repeat 14px center;border:1px solid #e6c26e}
 .msg_alert img {background-position:-47px -27px}
 .msg_box .msg_close {position:absolute;top:2px;right:2px;cursor:pointer}
+.msg_box p{margin-bottom: 0}
 		
 	/* forms */
 .formEl_a input {
