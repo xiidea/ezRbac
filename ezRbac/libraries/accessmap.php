@@ -4,9 +4,9 @@
  * AccessMap class file. 
  * A Simple Access Control Mapping Library
  *
- * @version	1.1
+ * @version	1.2
  * @package ezRbac
- * @since ezRbac v 0.2
+ * @since ezRbac v 0.3
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -45,22 +45,24 @@ class AccessMap{
 	/**
 	 * @var mix cache the access details value in array after 1st time parsing
 	 */
-	$_access_details=false;
+	$_access_details=false,
+
+    $_login_session_key;
 
 
     /**
      * @access Public
-     * @param $param paremeter array get the controller name
+     * @param array $param array get the controller name
      */
     function __construct($param=array()){
         $this->CI = & get_instance();
 
         $controller=(isset($param["controller"]))?strtolower($param["controller"]):false;
-
+        $this->_login_session_key=$this->CI->config->item('login_session_key', 'ez_rbac');
         if($controller){
             if($this->isGuest()){   //Nothing to do but handle login
                 $action= $this->CI->input->post("action")?$this->CI->input->post("action"):'login';
-                if(!($action=='login' || $action=='recover_password')){ //This usefull for wrong action parameter
+                if(!($action=='login' || $action=='recover_password')){ //This useful for wrong action parameter
                     $action='login';
                 }
 
@@ -117,7 +119,7 @@ class AccessMap{
      * @return bool
      */
     function isGuest(){
-        if (!$this->CI->session->userdata('user_id')){
+        if (!$this->CI->session->userdata($this->_login_session_key)){
            //try to auto login first
             $this->CI->load->library('ezlogin');
             return !$this->CI->ezlogin->auto_login();
@@ -133,14 +135,14 @@ class AccessMap{
      * @return String. Binary string in a acceptable format
      */
 	private function get_access_string($controller,$access_role=false){
-		if(!$access_role && ! $this->CI->session->userdata('access_role'))
+		if(!$access_role && ! $this->CI->session->userdata($this->_login_session_key))
 		{
             echo "should not be here";
 			return FALSE;
 		}
 
 		if(!$access_role){
-            $access_role = $this->CI->session->userdata('access_role');
+            $access_role = $this->CI->session->userdata($this->_login_session_key);
         }
 
         $this->CI->load->model('user_access_map');

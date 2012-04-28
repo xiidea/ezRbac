@@ -4,9 +4,9 @@
  * ezRbacHook class file.
  * A Simple Codeigniter Hook To handle all controller request
  *
- * @version	1.1
+ * @version	1.2
  * @package ezRbac
- * @since ezRbac v 0.2
+ * @since ezRbac v 0.3
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -34,11 +34,16 @@ private
     /**
      * @var
      */
+    $_loginUrl="",
+    /**
+     * @var
+     */
     $_controller_name,
     /**
      * @var bool
      */
     $_isAjaxCall=false;
+
 
     /**
      *Constructor to initial all data and libraries
@@ -64,6 +69,8 @@ private
                                  $this->CI->config->item('public_controller', 'ez_rbac'):
                                  array();
 
+        //Get the login url
+        $this->_loginUrl=$this->CI->config->item('login_url', 'ez_rbac');
         //Load the own uri library
         $this->CI->load->library('ezuri');
 	}
@@ -76,7 +83,8 @@ private
         $this->_controller_name=$this->CI->router->fetch_class();
         $this->_controller=$this->CI->router->fetch_directory().$this->_controller_name;
 
-        if(in_array($this->_controller,$this->_public_controller)){
+        //I am sure login controller is a public resource
+        if($this->CI->uri->ruri_string()==$this->_loginUrl || in_array($this->_controller,$this->_public_controller)){
             return true;
         }
         return false;
@@ -84,6 +92,7 @@ private
 
     /**
      * This method will handle all library specific url like namege rbac or logout
+     * @return bool
      */
     private function manage_access(){
         $isRbacUrl=$this->CI->ezuri->isRbacUrl();
@@ -129,6 +138,14 @@ private
         if($this->isPublicRequest()){
             return;
         }
+
+        //If we do not have to handle login then its better check this now!!
+        if($this->_loginUrl!="" && !$this->CI->session->userdata('access_role')){
+            //user not loged in and you wished to handle it your self. Here you go
+            redirect($this->_loginUrl);
+        }
+
+
         //Get custom access map defined in controller
         if(in_array(strtolower('access_map'), array_map('strtolower', get_class_methods($this->_controller_name)))){
             $this->_custom_access_map=$this->CI->access_map();

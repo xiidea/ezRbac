@@ -6,9 +6,9 @@
  * This model represents user autologin data. It can be used
  * for user verification when user claims his autologin passport.
  *
- * @version	1.0
+ * @version	1.1
  * @package ezRbac
- * @since ezRbac v 0.1
+ * @since ezRbac v 0.3
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -26,6 +26,8 @@ class User_Autologin extends CI_Model
      */
     private $_user_table_name;
 
+    private $_user_schema;
+
     /**
      * Constructor function
      */
@@ -35,6 +37,7 @@ class User_Autologin extends CI_Model
         $CI=& get_instance();
         $this->_table_name=$CI->config->item('auto_login_table','ez_rbac');
         $this->_user_table_name=$CI->config->item('user_table','ez_rbac');
+        $this->_user_schema=$this->CI->config->item('schema_user_table','ez_rbac');
 	}
 
 	/**
@@ -47,11 +50,11 @@ class User_Autologin extends CI_Model
 	 */
 	function get($user_id, $key)
 	{
-		$this->db->select($this->_user_table_name.'.id');
-		$this->db->select($this->_user_table_name.'.email');
-        $this->db->select($this->_user_table_name.'.user_role_id');
+		$this->db->select($this->_user_table_name.'.'.$this->_user_schema['id']);
+		$this->db->select($this->_user_table_name.'.'.$this->_user_schema['email']);
+        $this->db->select($this->_user_table_name.'.'.$this->_user_schema['user_role_id']);
 		$this->db->from($this->_user_table_name);
-		$this->db->join($this->_table_name, $this->_table_name.'.user_id = '.$this->_user_table_name.'.id');
+		$this->db->join($this->_table_name, $this->_table_name.'.user_id = '.$this->_user_table_name.'.'.$this->_user_schema['id']);
 		$this->db->where($this->_table_name.'.user_id', $user_id);
 		$this->db->where($this->_table_name.'.key_id', $key);
 		$query = $this->db->get();

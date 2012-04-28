@@ -6,9 +6,9 @@
  * This model represents user  data. It can be used
  * for retriving user data and validate agains the login.
  *
- * @version	1.1
+ * @version	1.2
  * @package ezRbac
- * @since ezRbac v 0.2
+ * @since ezRbac v 0.3
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -26,6 +26,13 @@ class Ezuser extends  CI_Model {
     private $_table_name;
 
     /**
+     * @var $_schema store the schema map of user table
+     */
+    private $_schema;
+
+
+
+    /**
      * constructor function
      */
     function __construct()
@@ -35,6 +42,11 @@ class Ezuser extends  CI_Model {
         $this->CI=& get_instance();
 
         $this->_table_name=$this->CI->config->item('user_table','ez_rbac');
+        $this->_schema=$this->CI->config->item('schema_user_table','ez_rbac');
+    }
+
+    private function _f($f){
+        return $this->_schema[$f];
     }
 
     /**
@@ -45,7 +57,7 @@ class Ezuser extends  CI_Model {
      */
     function get_user_by_email($email)
     {
-        $this->db->where('LOWER(email)=', strtolower($email));
+        $this->db->where('LOWER('.$this->_schema['email'].')=', strtolower($email));
 
         $query = $this->db->get($this->_table_name);
         if ($query->num_rows() == 1) return $query->row();
@@ -61,16 +73,16 @@ class Ezuser extends  CI_Model {
      */
     function update_login_info($user_id)
     {
-        $this->db->set('reset_request_code', NULL);
-        $this->db->set('reset_request_time', NULL);
-        $this->db->set('reset_request_ip', NULL);
-        $this->db->set('new_email', NULL);
-        $this->db->set('new_password', NULL);
-        $this->db->set('verification_status', 1);
-        $this->db->set('last_login_ip', $this->CI->input->ip_address());
-        $this->db->set('last_login', date('Y-m-d H:i:s'));
+        $this->db->set($this->_schema['reset_request_code'], NULL);
+        $this->db->set($this->_schema['reset_request_time'], NULL);
+        $this->db->set($this->_schema['reset_request_ip'], NULL);
+        $this->db->set($this->_schema['new_email'], NULL);
+        $this->db->set($this->_schema['new_password'], NULL);
+        $this->db->set($this->_schema['verification_status'], 1);
+        $this->db->set($this->_schema['last_login_ip'], $this->CI->input->ip_address());
+        $this->db->set($this->_schema['last_login'], date('Y-m-d H:i:s'));
 
-        $this->db->where('id', $user_id);
+        $this->db->where($this->_schema['id'], $user_id);
         $this->db->update($this->_table_name);
     }
 
@@ -80,12 +92,14 @@ class Ezuser extends  CI_Model {
      * @return string
      */
     public function requestPassword($user_id){
-        $data['reset_request_code']=$this->generateSalt();
-        $data['reset_request_time']=date('Y-m-d H:i:s');
-        $data['reset_request_ip']=ip2long($this->CI->input->ip_address());
-        $this->db->where('id',$user_id);
+        $data[$this->_schema['reset_request_code']]=$this->generateSalt();
+        $data[$this->_schema['reset_request_time']]=date('Y-m-d H:i:s');
+        $data[$this->_schema['reset_request_ip']]=ip2long($this->CI->input->ip_address());
+        $this->db->where($this->_schema['id'],$user_id);
         $this->db->update($this->_table_name,$data);
-        return md5($data['reset_request_code'].$data['reset_request_time'].$data['reset_request_ip']);
+        return md5($data[$this->_schema['reset_request_code']].
+                   $data[$this->_schema['reset_request_time']].
+                   $data[$this->_schema['reset_request_ip']]);
     }
 
     /**
@@ -96,11 +110,13 @@ class Ezuser extends  CI_Model {
         $salt=$this->generateSalt();
         $password=$this->CI->encrypt->sha1($npass.$salt);
 
-        $this->db->set('reset_request_code', NULL);
-        $this->db->set('reset_request_time', NULL);
-        $this->db->set('reset_request_ip', NULL);
-        $this->db->set('salt', $salt);
-        $this->db->set('password', $password);
+        $this->db->set($this->_schema['reset_request_code'], NULL);
+        $this->db->set($this->_schema['reset_request_time'], NULL);
+        $this->db->set($this->_schema['reset_request_ip'], NULL);
+        $this->db->set('', NULL);
+        $this->db->set('', NULL);
+        $this->db->set($this->_schema['salt'], $salt);
+        $this->db->set($this->_schema['password'], $password);
         $this->db->update($this->_table_name);
     }
 

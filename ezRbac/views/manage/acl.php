@@ -29,8 +29,8 @@
                			<select size="1" name="user_role_id" id="form_field_user_role" style="width:250px;" onchange="update_previlage()">
                         <option value="0">--select--</option>
                         <?php 
-                         foreach ($access_roles->result() as $role) {
-                            echo "<option value='$role->id'>$role->role_name</option>";
+                         foreach ($access_roles as $role) {
+                            echo "<option value='$role[id]'>$role[role_name]</option>";
                         }
                         ?>
                      </select>

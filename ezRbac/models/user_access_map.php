@@ -97,18 +97,6 @@ class user_access_map extends  CI_Model {
         //Existing data so update
         $this->db->update($this->_table_name, $data,$where);
     }
-
-    /**
-     * Get all existing user role saved in database
-     * @return array
-     */
-    function get_role_list(){
-        $query = $this->db->get($this->_user_role_table);
-        if ($query->num_rows() > 0) {
-            return $query;
-        }
-        return array();
-    }
 }
 
 

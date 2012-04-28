@@ -16,8 +16,14 @@ $config['default_access_map']=array("publish","delete","edit","create","view");;
 $config['autologin_cookie_life']=24*60*60*30;
 
 //The redirect url if access denied for a resource url, should be a public controller
-// Leve it empty if you are not sure about this
+// Leave it empty if you are not sure about this
 $config['redirect_url']="";
+
+//If you like to handle login then set your login url here, Leave it empty to let me handle it!!
+$config['login_url']="";
+//Login check session key name,  used to check if a user is loged in or not,
+// Session will store the access_role_id of loged in user
+$config['login_session_key']="access_role";
 
 //The password validation rule check for minimum password length
 $config['password_min_length']=6;
@@ -38,6 +44,28 @@ $config['user_table']="system_users";
 $config['user_role_table']="user_role";
 //The database table  name used to store Access Control List as per user role
 $config['access_map_table']="user_access_map";
+
+//Define schema map
+//Helpful to adapt your db without modifying the code!!
+$config['schema_user_table']=array(
+                                    'id' => 'id',
+                                    'email' => 'email',
+                                    'password' => 'password',
+                                    'salt' => 'salt',
+                                    'user_role_id' => 'user_role_id',
+                                    'last_login' => 'last_login',
+                                    'last_login_ip' => 'last_login_ip',
+                                    'reset_request_code' => 'reset_request_code',
+                                    'reset_request_time' => 'reset_request_time',
+                                    'reset_request_ip' => 'reset_request_ip',
+                                    'new_email' => 'new_email',
+                                    'new_password' => 'new_password',
+                                    'verification_status' => 'verification_status'
+                                );
+$config['schema_user_role']=array(
+                                    'id' => 'id',
+                                    'role_name'=>'role_name'
+                                );
 
 
 //Enable or disable the management interface

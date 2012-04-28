@@ -3,9 +3,9 @@
  * ezlogin class
  * A simple class adds the login feature to the package
  *
- * @version	1.1
+ * @version	1.2
  * @package ezRbac
- * @since ezRbac v 0.2
+ * @since ezRbac v 0.3
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -23,12 +23,18 @@ class ezlogin
      */
     private $error;
 
+    private $_login_session_key=false;
+
+    private $_user_schema;
+
     /**
      *
      */
     function __construct()
     {
         $this->CI = & get_instance();
+        $this->_login_session_key=$this->CI->config->item('login_session_key', 'ez_rbac');
+        $this->_user_schema=$this->CI->config->item('schema_user_table','ez_rbac');
     }
 
 
@@ -133,12 +139,12 @@ class ezlogin
         if (!is_null($user = $this->CI->ezuser->get_user_by_email($useemail))) {	//email ok
 
             // Does password match hash in database?
-            if ($this->CI->encrypt->sha1($password.$user->salt)===$user->password){		// password ok
+            if ($this->CI->encrypt->sha1($password.$user->{$this->_user_schema['salt']})===$user->{$this->_user_schema['password']}){		// password ok
 
                 $this->CI->session->set_userdata(array(
-                    'user_id'	=> $user->id,
-                    'user_email'	=> $user->email,
-                    'access_role'	=> $user->user_role_id
+                    'user_id'	=> $user->{$this->_user_schema['id']},
+                    'user_email'	=> $user->{$this->_user_schema['email']},
+                    'access_role'	=> $user->{$this->_user_schema['user_role_id']}
                 ));
 
                 if ($user->verification_status == 0) {							// fail - not activated
@@ -147,9 +153,9 @@ class ezlogin
                 }
                 												// success
                 if ($remember) {
-                    $this->create_autologin($user->id);
+                    $this->create_autologin($user->{$this->_user_schema['id']});
                 }
-                $this->CI->ezuser->update_login_info($user->id);
+                $this->CI->ezuser->update_login_info($user->{$this->_user_schema['id']});
                 return TRUE;
             } 														// fail - wrong password
             $this->error =  'Incorrect Password';
@@ -199,9 +205,9 @@ class ezlogin
 
                     // Login user
                     $this->CI->session->set_userdata(array(
-                        'user_id'	=> $user->id,
-                        'user_email'	=> $user->email,
-                        'access_role'	=> $user->user_role_id,
+                        'user_id'	=> $user->{$this->_user_schema['id']},
+                        'user_email'	=> $user->{$this->_user_schema['email']},
+                        'access_role'	=> $user->{$this->_user_schema['user_role_id']},
                     ));
 
                     // Renew users cookie to prevent it from expiring
@@ -212,7 +218,7 @@ class ezlogin
                     ));
 
                     $this->CI->load->model('ezuser');
-                    $this->CI->ezuser->update_login_info($user->id);
+                    $this->CI->ezuser->update_login_info($user->{$this->_user_schema['id']});
                     return TRUE;
                 }
             }
@@ -284,8 +290,8 @@ class ezlogin
      * @return bool
      */
     private function process_recovery($user){
-        $key=$this->CI->ezuser->requestPassword($user->id);
-        $data['url']=$this->CI->ezuri->RbacUrl("resetpassword/key/$key/e/".rawurlencode($user->email));
+        $key=$this->CI->ezuser->requestPassword($user->{$this->_user_schema['id']});
+        $data['url']=$this->CI->ezuri->RbacUrl("resetpassword/key/$key/e/".rawurlencode($user->{$this->_user_schema['email']}));
         $email_body=$this->CI->load->view('login/_password_email', $data,true);
 
         //Disable this while you running the script on server
@@ -350,9 +356,9 @@ class ezlogin
         if($key==""){
             return false;
         }
-        $date = new DateTime($user->reset_request_time);
+        $date = new DateTime($user->{$this->_user_schema['reset_request_time']});
         $date->modify("+2 day");
-        return (md5($user->reset_request_code.$user->reset_request_time.$user->reset_request_ip)===$key && $date>new DateTime());
+        return (md5($user->{$this->_user_schema['reset_request_code']}.$user->{$this->_user_schema['reset_request_time']}.$user->{$this->_user_schema['reset_request_ip']})===$key && $date>new DateTime());
     }
 
     /**
