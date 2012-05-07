@@ -11,23 +11,27 @@ Key Features
 * Integrated Access Control Management Interface
 * Configurable DB Table name
 * Support Clean Url routing!
+* Easy to adapt existing schema just by editing config file!!
+* Usable with your existing login system!
 * Coming more....!!!
  
 
 Current Active Version
 ======================
-v 0.2 Released!
+v 0.3 Released!
 
  
 How To Install
 ==============
-Installation of this library is simple 3 steps
+Installation of this library is simple 4 steps
 
 1. Put **ezRbac** in the **third_party** Directory of your application
 
 2. Run the sqls in schema directory or create three tables in your database manually.
 
-3. Add a hook in **./application/config/hooks.php**
+3. Set <code>$config['enable_hooks'] = TRUE;</code> at **./application/config/config.php**
+
+4. Add a hook in **./application/config/hooks.php**
 
 ```php
     $hook['post_controller_constructor'] = array(

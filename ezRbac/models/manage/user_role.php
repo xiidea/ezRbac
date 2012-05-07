@@ -41,6 +41,7 @@ class user_role extends  CI_Model {
     {
         // Call the Model constructor
         parent::__construct();
+        $this->CI = & get_instance();
         $this->_table_name=$this->CI->config->item('user_role_table','ez_rbac');
         $schema=$this->CI->config->item('schema_user_role','ez_rbac');
         ($schema) AND $this->_schema_map=$schema;

@@ -164,7 +164,7 @@ class ezmanage
         //First time came here!! Visit our interface!!!
         $this->CI->load->model('manage/ezcontrollers');
         $this->CI->load->model('user_access_map');
-        $this->CI->load->model('user_role');
+        $this->CI->load->model('manage/user_role');
         //Get all controller list except public controllers
         $clist=array_diff($this->CI->ezcontrollers->get_controllers(),$this->CI->config->item('public_controller', 'ez_rbac'));
 
