@@ -59,6 +59,15 @@ class AccessMap{
 
         $controller=(isset($param["controller"]))?strtolower($param["controller"]):false;
         $this->_login_session_key=$this->CI->config->item('login_session_key', 'ez_rbac');
+
+        $default_access_map=$this->CI->config->item('default_access_map', 'ez_rbac');
+        if($default_access_map){
+            if(is_array($default_access_map)&& !empty($default_access_map))
+                $this->_access_arr=$this->CI->config->item('default_access_map', 'ez_rbac');
+        }
+        //Make all the valu lower case
+        $this->_access_arr=array_map('strtolower',$this->_access_arr);
+
         if($controller){
             if($this->isGuest()){   //Nothing to do but handle login
                 $action= $this->CI->input->post("action")?$this->CI->input->post("action"):'login';
@@ -79,14 +88,6 @@ class AccessMap{
      * @param bool $access_role
      */
     public function initialize($controller,$access_role=false){
-        $default_access_map=$this->CI->config->item('default_access_map', 'ez_rbac');
-        if($default_access_map){
-            if(is_array($default_access_map)&& !empty($default_access_map))
-            $this->_access_arr=$this->CI->config->item('default_access_map', 'ez_rbac');
-        }
-
-        //Make all the valu lower case
-        $this->_access_arr=array_map('strtolower',$this->_access_arr);
 
         $this->_access_map_array_size=count($this->_access_arr);
 

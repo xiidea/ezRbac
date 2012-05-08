@@ -13,7 +13,7 @@
 		<div class="top-menus">
             <a href="https://github.com/xiidea/ezRbac/wiki">help</a> |
             <a href="https://github.com/xiidea/ezRbac">ezrbac</a> | 
-            <?php echo anchor($acl_url.'/logout','Logout'); ?>				
+            <?php echo anchor($logout_url,'Logout'); ?>
         </div>
         <div id="logo"><h3>Manage ezRbac ACL</h3></div>	
 	</div><!-- header -->
@@ -82,7 +82,7 @@
 
         var post = $("#frm_acl_gui").serializeObject();
 
-        $.post('<?php echo $acl_url.'/acl/update'; ?>',post,function(data) {
+        $.post('<?php echo $update_url; ?>',post,function(data) {
             alert(data);
            // alert('saved!');
         });
@@ -99,7 +99,7 @@ function update_previlage(){
 		controller :$("#form_field_access_node").val()		
 	}
 	
-	$.post('<?php echo $acl_url.'/acl/get_permission'; ?>', post, function(data) {
+	$.post('<?php echo $permission_url; ?>', post, function(data) {
 	  for (var i in data){
           $("#chk_permisssion_"+i).attr('checked', (data[i]=='1'));
       }

@@ -169,7 +169,9 @@ class ezmanage
         $clist=array_diff($this->CI->ezcontrollers->get_controllers(),$this->CI->config->item('public_controller', 'ez_rbac'));
 
         $data=array(
-            'acl_url'=>$this->url(''),
+            'logout_url'=>$this->url('logout'),
+            'update_url'=>$this->url('acl/update'),
+            'permission_url'=>$this->url('acl/get_permission'),
             'controller_list'=>$clist,
             'access_roles'=>$this->CI->user_role->get_role_list(),
             'access_list'=>$this->CI->accessmap->get_access_map()
