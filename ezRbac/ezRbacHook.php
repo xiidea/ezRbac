@@ -140,7 +140,7 @@ private
         }
 
         //If we do not have to handle login then its better check this now!!
-        if($this->_loginUrl!="" && !$this->CI->session->userdata('access_role')){
+        if($this->_loginUrl!="" && !$this->CI->session->userdata($this->CI->config->item('login_session_key', 'ez_rbac'))){
             //user not loged in and you wished to handle it your self. Here you go
             redirect($this->_loginUrl);
         }
