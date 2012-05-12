@@ -44,38 +44,38 @@ class ezlogin
      */
     private function validation_rule($index=0){
         $ret_arr= array(
-                        array(
-                            array(
-                                'field'   => 'username',
-                                'label'   => 'Email',
-                                'rules'   => 'trim|required|valid_email|xss_clean'
-                            ),
-                            array(
-                                'field'   => 'password',
-                                'label'   => 'Password',
-                                'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']'
-                            )
-                        ),
-                        array(
-                            array(
-                                'field'   => 'username',
-                                'label'   => 'Email',
-                                'rules'   => 'trim|required|valid_email|xss_clean'
-                            )
-                         ),
-                        array(
-                            array(
-                                'field'   => 'password',
-                                'label'   => 'New Password',
-                                'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']|matches[re_password]'
-                            ),
-                            array(
-                                'field'   => 're_password',
-                                'label'   => 'Re-Type Password',
-                                'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']'
-                            )
-                        ),
-                     );
+            array(
+                array(
+                    'field'   => 'username',
+                    'label'   => 'Email',
+                    'rules'   => 'trim|required|valid_email|xss_clean'
+                ),
+                array(
+                    'field'   => 'password',
+                    'label'   => 'Password',
+                    'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']'
+                )
+            ),
+            array(
+                array(
+                    'field'   => 'username',
+                    'label'   => 'Email',
+                    'rules'   => 'trim|required|valid_email|xss_clean'
+                )
+            ),
+            array(
+                array(
+                    'field'   => 'password',
+                    'label'   => 'New Password',
+                    'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']|matches[re_password]'
+                ),
+                array(
+                    'field'   => 're_password',
+                    'label'   => 'Re-Type Password',
+                    'rules'   => 'trim|required|xss_clean|min_length['.$this->CI->config->item('password_min_length', 'ez_rbac').']'
+                )
+            ),
+        );
         return $ret_arr[$index];
     }
 
@@ -141,17 +141,17 @@ class ezlogin
             // Does password match hash in database?
             if ($this->CI->encrypt->sha1($password.$user->{$this->_user_schema['salt']})===$user->{$this->_user_schema['password']}){		// password ok
 
+                if ($user->verification_status == 0) {							// fail - not activated
+                    $this->error = 'email is not verified';
+                    return false;
+                }
                 $this->CI->session->set_userdata(array(
                     'user_id'	=> $user->{$this->_user_schema['id']},
                     'user_email'	=> $user->{$this->_user_schema['email']},
                     'access_role'	=> $user->{$this->_user_schema['user_role_id']}
                 ));
 
-                if ($user->verification_status == 0) {							// fail - not activated
-                    $this->error = 'email is not verified';
-                    return false;
-                }
-                												// success
+                // success
                 if ($remember) {
                     $this->create_autologin($user->{$this->_user_schema['id']});
                 }
@@ -362,10 +362,10 @@ class ezlogin
     }
 
     /**
-     * trrminate the execution within the script! we will be stop here and
-     * further execution will be stoped
+     * terminate the execution within the script! we will be stop here and
+     * further execution will be stopped
      * I have not found anything to detect the exit , so doing it manually!!
-     * Hope the pice of code will not be necessary when i figure it out!!!
+     * Hope the piece of code will not be necessary when i figure it out!!!
      */
     private function end_now(){
         $this->CI->we_are_done=true;
