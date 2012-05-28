@@ -128,7 +128,8 @@ class ezmanage
                 break;
             case 'update':
                 $this->CI->load->model('user_access_map');
-                $p= $this->CI->accessmap->validate(decbin(array_sum($_POST['permission'])));
+                $permission=isset($_POST['permission'])?$_POST['permission']:array();
+                $p= $this->CI->accessmap->validate(decbin(array_sum($permission)));
                 $this->CI->user_access_map->set_permission($this->CI->input->post('controller'),$this->CI->input->post('user_role_id'),$p);
                 echo "ok";
                 break;
