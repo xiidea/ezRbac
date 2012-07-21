@@ -23,13 +23,14 @@ CREATE TABLE `system_users` (
   `salt` varchar(160) DEFAULT NULL,
   `user_role_id` int(10) DEFAULT NULL,
   `last_login` datetime DEFAULT '0000-00-00 00:00:00',
-  `last_login_ip` int(11) DEFAULT NULL,
+  `last_login_ip` varchar(64) DEFAULT NULL,
   `reset_request_code` varchar(128) DEFAULT NULL,
   `reset_request_time` datetime DEFAULT NULL,
-  `reset_request_ip` int(11) DEFAULT NULL,
+  `reset_request_ip` varchar(64) DEFAULT NULL,
   `new_email` varchar(254) DEFAULT NULL,
   `new_password` varchar(160) DEFAULT NULL,
-  `verification_status` int(1) NOT NULL DEFAULT '0',
+  `verification_status` tinyint(1) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 

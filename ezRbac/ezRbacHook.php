@@ -182,7 +182,9 @@ private
      */
     private function restrict_access(){
         if($this->_isAjaxCall){   //do not redirect return json object if it is a ajax request
-            die(json_encode(array('success'=>false,'msg'=>$this->CI->config->item('ajax_no_permission_msg', 'ez_rbac'))));
+            $msg=json_encode(array('success'=>false,'msg'=>$this->CI->config->item('ajax_no_permission_msg', 'ez_rbac')));
+            set_status_header(403,"forbidden");
+            die($msg);
         }
         if($this->CI->config->item('redirect_url', 'ez_rbac')){
             redirect($this->CI->config->item('redirect_url', 'ez_rbac'));
@@ -200,8 +202,8 @@ private
     }
 
     /**
-     * trrminate the execution within the script! we will be stop here and
-     * further execution will be stoped
+     * terminate the execution within the script! we will be stop here and
+     * further execution will be stopped
      * I have not found anything to detect the exit , so doing it manually!!
      * Hope the pice of code will not be necessary when i figure it out!!!
      */
@@ -211,9 +213,9 @@ private
     }
 
     /**
-     * Doing all cleanup stuf
+     * Doing all cleanup stuff
      * We haven't forgot to remove the package path after finishing everything!.
-     * We do not need to load thirdparty resources anymore!
+     * We do not need to load third party resources anymore!
      */
     function __destruct(){
         $this->CI->load->remove_package_path(APPPATH.'third_party/ezRbac/');

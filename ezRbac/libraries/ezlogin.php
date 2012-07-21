@@ -141,10 +141,15 @@ class ezlogin
             // Does password match hash in database?
             if ($this->CI->encrypt->sha1($password.$user->{$this->_user_schema['salt']})===$user->{$this->_user_schema['password']}){		// password ok
 
-                if ($user->verification_status == 0) {							// fail - not activated
+                if ($user->verification_status == 0) {							// fail - not verified
                     $this->error = 'email is not verified';
                     return false;
                 }
+                if ($user->status == 0) {							// fail - not activated
+                    $this->error = 'account is disabled! contact system administrator';
+                    return false;
+                }
+
                 $this->CI->session->set_userdata(array(
                     'user_id'	=> $user->{$this->_user_schema['id']},
                     'user_email'	=> $user->{$this->_user_schema['email']},
@@ -202,6 +207,16 @@ class ezlogin
 
                 $this->CI->load->model('user_autologin');
                 if (!is_null($user = $this->CI->user_autologin->get($data['user_id'], md5($data['key'])))) {
+
+                    if ($user->verification_status == 0) {							// fail - not verified
+                        $this->error = 'email is not verified';
+                        return false;
+                    }
+                    if ($user->status == 0) {							// fail - not activated
+                        $this->error = 'account is disabled! contact system administrator';
+                        return false;
+                    }
+
 
                     // Login user
                     $this->CI->session->set_userdata(array(

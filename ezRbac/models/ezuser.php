@@ -94,7 +94,7 @@ class Ezuser extends  CI_Model {
     public function requestPassword($user_id){
         $data[$this->_schema['reset_request_code']]=$this->generateSalt();
         $data[$this->_schema['reset_request_time']]=date('Y-m-d H:i:s');
-        $data[$this->_schema['reset_request_ip']]=ip2long($this->CI->input->ip_address());
+        $data[$this->_schema['reset_request_ip']]=$this->CI->input->ip_address();
         $this->db->where($this->_schema['id'],$user_id);
         $this->db->update($this->_table_name,$data);
         return md5($data[$this->_schema['reset_request_code']].
