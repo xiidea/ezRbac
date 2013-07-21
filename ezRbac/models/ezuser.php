@@ -59,11 +59,16 @@ class Ezuser extends  CI_Model {
     {
         $this->db->where('LOWER('.$this->_schema['email'].')=', strtolower($email));
 
-        $query = $this->db->get($this->_table_name);
+        $query = $this->db->get($this->_table_name, 0, 1);
 
-        if ($query->num_rows() == 1) return $query->row();
+        if ($query->num_rows() > 0) return $query->row();
 
         return NULL;
+    }
+
+    function getUserID($user)
+    {
+        $user->{$this->_schema['id']};
     }
 
     /**
@@ -122,6 +127,73 @@ class Ezuser extends  CI_Model {
         $this->db->update($this->_table_name);
     }
 
+    public function create($data = array())
+    {
+        if(isset($data['id'])){
+            unset($data['id']);
+        };
+
+        if(!isset($data['email'])){
+            throw new Exception('You must provide `email`');
+        }
+
+        if($this->get_user_by_email($data['email'])){
+            throw new Exception('email already exist');
+        }
+
+        if(!isset($data['user_role_id'])){
+            throw new Exception('You must user_role_id');
+        }
+
+        $data['salt'] = $this->generateSalt();
+
+        if(!isset($data['password'])){
+            $data['password'] = $this->generate_password($this->generateSalt());
+        }
+
+        $data['password'] = $this->encrypt->sha1($data['password'].$data['salt']);
+
+        $data = $this->parseData($data);
+
+        $this->db->insert($data);
+
+        return  $this->db->insert_id();
+
+    }
+
+    public function update($data = array()){
+
+        $user = $this->get_user_by_email($data['email']);
+
+        if($user && $data['id'] !== $user->{$this->_schema['id']}){
+            throw new Exception('Email already register');
+        }
+
+        $id = $data['id'];
+
+        if(isset($data['password']) && !empty($data['password'])){
+            $data['salt'] = $this->generateSalt();
+            $data['password'] = $this->encrypt->sha1($data['password'].$data['salt']);
+        }
+
+        $data = $this->parseData($data);
+
+        $this->db->update($this->_table_name,$data,
+            array($this->_schema_map['id'] => $id));
+
+    }
+
+
+    private function parseData($data)
+    {
+        $return  = array();
+        foreach($data as $key=>$value){
+            if(isset($this->_schema[$key]))
+            $return[$this->_schema[$key]] = $value;
+       }
+        return $return;
+    }
+
     /**
      * Generates a salt that can be used to generate a password hash.
      * @return string the salt
@@ -129,6 +201,10 @@ class Ezuser extends  CI_Model {
     protected function generateSalt()
     {
         return uniqid('',true);
+    }
+
+    function generate_password($salt) {
+        return substr($salt,rand(1,5),6);
     }
 
 }

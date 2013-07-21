@@ -73,6 +73,9 @@ private
         $this->_loginUrl=$this->CI->config->item('login_url', 'ez_rbac');
         //Load the own uri library
         $this->CI->load->library('ezuri');
+
+
+        $this->CI->load->library('ezrbac');
 	}
 
     /**

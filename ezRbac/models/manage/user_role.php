@@ -64,6 +64,69 @@ class user_role extends  CI_Model {
         }
         return $retarr;
     }
+
+    public function get_role_id($roleName = ""){
+        $this->db->like($this->_schema_map['role_name'], $roleName, 'none');
+
+        $query = $this->db->get($this->_table_name, 0, 1);
+
+        if($query->num_rows() > 0){
+           return $query->result()[0]->{$this->_schema_map['id']};
+        }
+
+        return null;
+
+    }
+
+    public function get_role_by_id($id=null)
+    {
+        if(empty($id)){
+            return null;
+        }
+
+        $this->db->where(array($this->_schema_map['id'] => $id));
+        $query = $this->db->get($this->_table_name, 0, 1);
+
+        if($query->num_rows() > 0){
+            return $query->result()[0]->{$this->_schema_map['role_name']};
+        }
+
+        return null;
+
+    }
+
+    public function create($roleName = ""){
+       if($roleName == ""){
+           return null;
+       }
+
+       $role_id = $this->get_role_id($roleName);
+
+        if(!$role_id){
+            $this->db->insert($this->_table_name, array($this->_schema_map['role_name']=> $roleName ));
+            $role_id =  $this->db->insert_id();
+        }
+
+        return $role_id;
+    }
+
+    public function update($id = null, $roleName = ""){
+        if((!$id) || $roleName == "" ){
+            return null;
+        }
+
+        $role_id = $this->get_role_id($roleName);
+
+        if($role_id && $id !== $role_id){
+            throw new Exception('Role name already exist');
+        }
+
+        $this->db->update($this->_table_name,
+                        array($this->_schema_map['role_name']=> $roleName ),
+                        array($this->_schema_map['id'] => $id));
+
+    }
+
 }
 
 
