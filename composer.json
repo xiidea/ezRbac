@@ -1,7 +1,0 @@
-{
-    "name": "xiidea/ezRbac",
-    "type": "codeigniter-third-party",
-    "require": {
-        "composer/installers": "~1.0"
-    }
-}

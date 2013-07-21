@@ -55,12 +55,14 @@ class Ezuser extends  CI_Model {
      * @param	string
      * @return	object
      */
-    function get_user_by_email($email)
+    public function get_user_by_email($email)
     {
         $this->db->where('LOWER('.$this->_schema['email'].')=', strtolower($email));
 
         $query = $this->db->get($this->_table_name);
+
         if ($query->num_rows() == 1) return $query->row();
+
         return NULL;
     }
 
@@ -71,7 +73,7 @@ class Ezuser extends  CI_Model {
      * @param	int
      * @return	void
      */
-    function update_login_info($user_id)
+    public function update_login_info($user_id)
     {
         $this->db->set($this->_schema['reset_request_code'], NULL);
         $this->db->set($this->_schema['reset_request_time'], NULL);
@@ -94,7 +96,7 @@ class Ezuser extends  CI_Model {
     public function requestPassword($user_id){
         $data[$this->_schema['reset_request_code']]=$this->generateSalt();
         $data[$this->_schema['reset_request_time']]=date('Y-m-d H:i:s');
-        $data[$this->_schema['reset_request_ip']]=$this->CI->input->ip_address();
+        $data[$this->_schema['reset_request_ip']]=ip2long($this->CI->input->ip_address());
         $this->db->where($this->_schema['id'],$user_id);
         $this->db->update($this->_table_name,$data);
         return md5($data[$this->_schema['reset_request_code']].
