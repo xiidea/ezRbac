@@ -150,8 +150,6 @@ class ezlogin
                     return false;
                 }
 
-                $this->CI->ezrbac->setCurrentUser($user);
-
                 $this->CI->session->set_userdata(array(
                     'user_id'	=> $user->{$this->_user_schema['id']},
                     'user_email'	=> $user->{$this->_user_schema['email']},
@@ -221,7 +219,6 @@ class ezlogin
 
 
                     // Login user
-                    $this->CI->ezrbac->setCurrentUser($user);
                     $this->CI->session->set_userdata(array(
                         'user_id'	=> $user->{$this->_user_schema['id']},
                         'user_email'	=> $user->{$this->_user_schema['email']},
@@ -253,7 +250,6 @@ class ezlogin
         $this->delete_autologin();
 
         //making sure though the session data exist through the script execution  it must not be valid after logout
-        $this->CI->ezrbac->setCurrentUser(null);
         $this->CI->session->set_userdata(array('user_id' => '', 'user_email' => '', 'access_role' => ''));
         $this->CI->session->sess_destroy();
     }

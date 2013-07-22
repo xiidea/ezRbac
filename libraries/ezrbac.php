@@ -18,21 +18,42 @@ class ezrbac {
 
     public function getCurrentUser()
     {
-       return $this->user;
+       if(!$this->user){
+           $user_id = $this->getCurrentUserID();
+           if(!$user_id){
+               return  null;
+           }
+
+           $this->user = $this->CI->ezuser->get_user_by_id($user_id);
+       }
+        return $this->user;
     }
 
     public function getCurrentUserID()
     {
-        if(!$this->user){
-            return false;
+        $user_id = $this->CI->session->userdata('user_id');
+        if($user_id && !empty($user_id)){
+            return $user_id;
         }
 
-        return $this->ezuser->getUserID($this->user);
+        return null;
     }
 
     public function setCurrentUser($user)
     {
        return $this->user = $user;
+    }
+
+    public function isGuest()
+    {
+        $guest = false;
+
+        if($this->CI->session->userdata($this->CI->config->item('login_session_key', 'ez_rbac'))){
+            $guest = !$this->getCurrentUserID();
+        }
+
+        return $guest;
+
     }
 
     public function createUser($data = array())

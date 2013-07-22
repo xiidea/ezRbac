@@ -66,6 +66,29 @@ class Ezuser extends  CI_Model {
         return NULL;
     }
 
+    /**
+     * Get user record by user_id
+     *
+     * @param	string
+     * @return	object
+     */
+    public function get_user_by_id($user_id)
+    {
+        $this->db->select($this->_schema['id']);
+        $this->db->select($this->_schema['email']);
+        $this->db->select($this->_schema['user_role_id']);
+        $this->db->select($this->_schema['last_login']);
+        $this->db->select($this->_schema['status']);
+        $this->db->select($this->_schema['verification_status']);
+        $this->db->where($this->_schema['id'], $user_id);
+
+        $query = $this->db->get($this->_table_name, 1);
+
+        if ($query->num_rows() > 0) return $query->row();
+
+        return NULL;
+    }
+
     function getUserID($user)
     {
         $user->{$this->_schema['id']};

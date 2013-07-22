@@ -60,7 +60,8 @@ $config['schema_user_table']=array(
                                     'reset_request_ip' => 'reset_request_ip',
                                     'new_email' => 'new_email',
                                     'new_password' => 'new_password',
-                                    'verification_status' => 'verification_status'
+                                    'verification_status' => 'verification_status',
+                                    'status' => 'status'
                                 );
 $config['schema_user_role']=array(
                                     'id' => 'id',
