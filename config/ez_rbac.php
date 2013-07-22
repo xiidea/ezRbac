@@ -32,6 +32,9 @@ $config['autologin_cookie_name']="ezrbac_remember_me";
 
 //The From email for password recovery email
 $config['password_recovery_email']="noreply@yourdomain.com";
+//The From name for password recovery email
+$config['password_recovery_email_name']="EzRbac";
+
 //The subject for password recovery email
 $config['password_recovery_subject']="Password Reset Request";
 
@@ -67,6 +70,15 @@ $config['schema_user_role']=array(
                                     'id' => 'id',
                                     'role_name'=>'role_name'
                                 );
+
+//Enable showing the email on browser rather then sending it. for debug and dev environment
+$config['show_password_reset_mail']=false;
+
+//use your own function to send email
+//$config['override_email_function']='name_of_your_function';
+//$option = array('subject'=>'', 'from'=>'', 'to'=>'','subject'=>'','body'=>'')
+//  name_of_your_function($option) will be called to send email
+$config['override_email_function']=false;
 
 
 //Enable or disable the management interface

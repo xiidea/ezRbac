@@ -145,8 +145,13 @@ class ezlogin
                     $this->error = 'email is not verified';
                     return false;
                 }
-                if ($user->status == 0) {							// fail - not activated
+                if ($user->{$this->_user_schema['status']} == 0) {							// fail - not activated
                     $this->error = 'account is disabled! contact system administrator';
+                    return false;
+                }
+
+                if(!$user->{$this->_user_schema['user_role_id']}){
+                    $this->error = 'user role is not defined for this user';
                     return false;
                 }
 
@@ -212,7 +217,7 @@ class ezlogin
                         $this->error = 'email is not verified';
                         return false;
                     }
-                    if ($user->status == 0) {							// fail - not activated
+                    if ($user->{$this->_user_schema['status']} == 0) {							// fail - not activated
                         $this->error = 'account is disabled! contact system administrator';
                         return false;
                     }
@@ -310,14 +315,28 @@ class ezlogin
         $email_body=$this->CI->load->view('login/_password_email', $data,true);
 
         //Disable this while you running the script on server
-        die($email_body);
+        if($this->CI->config->item('show_password_reset_mail', 'ez_rbac')){
+            die($email_body);
+        }
+
+        $option = array('subject'=>$this->CI->config->item('password_recovery_subject', 'ez_rbac'),
+                        'from'=>$this->CI->config->item('password_recovery_email', 'ez_rbac'),
+                        'from_name'=>$this->CI->config->item('password_recovery_email_name', 'ez_rbac'),
+                        'to'=>$user->email,
+                         'body'=>$email_body);
+
+        $mailFunction = $this->CI->config->item('override_email_function', 'ez_rbac');
+
+        if($mailFunction && is_callable($mailFunction)){
+            return $mailFunction($option);
+        }
 
         $config['mailtype']='html';
         $config['wordwrap'] = FALSE;
         $this->CI->email->initialize($config);
-        $this->CI->email->from($this->CI->config->item('password_recovery_email', 'ez_rbac'), 'EzRbac');
-        $this->CI->email->to($user->email);
-        $this->CI->email->subject($this->CI->config->item('password_recovery_subject', 'ez_rbac'));
+        $this->CI->email->from($option['from'], $option['form_name']);
+        $this->CI->email->to($option['to']);
+        $this->CI->email->subject($option['subject']);
         $this->CI->email->message($email_body);
         $this->CI->email->set_alt_message('View the mail using a html email client');
         $this->CI->email->send();
@@ -353,7 +372,7 @@ class ezlogin
 
                 $this->CI->load->model('ezuser');
                 $password=$this->CI->input->post("password",TRUE);
-                $this->CI->ezuser->set_new_password((string)$password);
+                $this->CI->ezuser->set_new_password((string)$password, $email);
                 $this->view_password_reset_message();
             }
             $this->view_password_reset_form();

@@ -136,17 +136,16 @@ class Ezuser extends  CI_Model {
      * Save new password after hashing that
      * @param $npass
      */
-    public function set_new_password($npass){
+    public function set_new_password($npass,$email){
         $salt=$this->generateSalt();
         $password=$this->CI->encrypt->sha1($npass.$salt);
 
         $this->db->set($this->_schema['reset_request_code'], NULL);
         $this->db->set($this->_schema['reset_request_time'], NULL);
         $this->db->set($this->_schema['reset_request_ip'], NULL);
-        $this->db->set('', NULL);
-        $this->db->set('', NULL);
         $this->db->set($this->_schema['salt'], $salt);
         $this->db->set($this->_schema['password'], $password);
+        $this->db->where($this->_schema['email'],$email);
         $this->db->update($this->_table_name);
     }
 
