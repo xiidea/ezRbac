@@ -38,15 +38,15 @@ class ezrbac {
     public function createUser($data = array())
     {
 
-        if(!isset($data['user_role_id']) || !isset($data['user_role'])){
+        if(!(isset($data['user_role_id']) || isset($data['user_role']))){
             throw new Exception('You must provide user_role_id or user_role');
         }
 
         if(!isset($data['user_role_id'])){
-            $data['user_role_id'] = $this->user_role->create($data['user_role']);
+            $data['user_role_id'] = $this->CI->user_role->create($data['user_role']);
         }
 
-        return $this->ezuser->create($data);
+        return $this->CI->ezuser->create($data);
     }
 
     public function updateUser($data = array())
@@ -56,10 +56,10 @@ class ezrbac {
         }
 
         if(isset($data['user_role'])){
-            $data['user_role_id'] = $this->user_role->create($data['user_role']);
+            $data['user_role_id'] = $this->CI->user_role->create($data['user_role']);
         }
 
-        return $this->ezuser->update($data);
+        return $this->CI->ezuser->update($data);
     }
 
 

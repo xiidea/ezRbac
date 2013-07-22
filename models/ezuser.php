@@ -59,7 +59,7 @@ class Ezuser extends  CI_Model {
     {
         $this->db->where('LOWER('.$this->_schema['email'].')=', strtolower($email));
 
-        $query = $this->db->get($this->_table_name, 0, 1);
+        $query = $this->db->get($this->_table_name, 1);
 
         if ($query->num_rows() > 0) return $query->row();
 
@@ -155,7 +155,7 @@ class Ezuser extends  CI_Model {
 
         $data = $this->parseData($data);
 
-        $this->db->insert($data);
+        $this->db->insert($this->_table_name, $data);
 
         return  $this->db->insert_id();
 

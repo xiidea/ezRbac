@@ -68,10 +68,11 @@ class user_role extends  CI_Model {
     public function get_role_id($roleName = ""){
         $this->db->like($this->_schema_map['role_name'], $roleName, 'none');
 
-        $query = $this->db->get($this->_table_name, 0, 1);
+        $query = $this->db->get($this->_table_name, 1);
 
         if($query->num_rows() > 0){
-           return $query->result()[0]->{$this->_schema_map['id']};
+            $result = $query->result();
+            return $result[0]->{$this->_schema_map['id']};
         }
 
         return null;
@@ -85,10 +86,11 @@ class user_role extends  CI_Model {
         }
 
         $this->db->where(array($this->_schema_map['id'] => $id));
-        $query = $this->db->get($this->_table_name, 0, 1);
+        $query = $this->db->get($this->_table_name, 1);
 
         if($query->num_rows() > 0){
-            return $query->result()[0]->{$this->_schema_map['role_name']};
+            $result = $query->result();
+            return $result[0]->{$this->_schema_map['role_name']};
         }
 
         return null;
