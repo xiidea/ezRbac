@@ -76,7 +76,7 @@ $config['show_password_reset_mail']=false;
 
 //use your own function to send email
 //$config['override_email_function']='name_of_your_function';
-//$option = array('subject'=>'', 'from'=>'', 'to'=>'','subject'=>'','body'=>'')
+//$option = array('subject'=>'','from'=>'', 'from_name'=>'', 'to'=>'','body'=>'');
 //  name_of_your_function($option) will be called to send email
 $config['override_email_function']=false;
 
