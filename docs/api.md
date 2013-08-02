@@ -14,6 +14,7 @@ Available API
 * registerUserSession($user) - Helpful if you have your login verification script, you can register session just by passing the user object
 * getUserMeta($user) - return the user meta data
 * getUserByID($user_id) - find and return user object by user ID
+* logoutUrl() - return the logout url
 
 $userdata details
 =================

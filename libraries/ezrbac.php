@@ -200,4 +200,14 @@ class ezrbac
     {
         return $this->CI->ezuser->get_user_by_id($user_id);
     }
+
+    /**
+     * find and return Logout url
+     *
+     * @return string
+     */
+    public function logoutUrl()
+    {
+        return $this->CI->ezuri->logout();
+    }
 }
