@@ -19,12 +19,12 @@ $userdata details
 =================
 The **$userdata** array can contain the following fields
 
-**id**              - An integer The user id(while update only)
-**user_role**       - A string that contain User Role of the user(you can provide user role or the **user_role_id** whatever you like if provided role is not exist it will be created).
-**user_role_id**    - An integer that contain User Role ID of the user(You have to provide only if you did not give the **user_role** ).
-**user_meta**       - An array containing user meta data. array must be as per schema definition of user_meta table. You have full freedom to create your meta_table with your requirement. for example table you can provide the value as array('first_name'=>'First', 'last_name'=>'Last')
-**email**           - A string that contain user email address
-**password**        - A string that contain plain password for the user
-**status**          - An integer 0(Active user) or 1(Disabled User)
+* **id**              - An integer The user id(while update only)
+* **user_role**       - A string that contain User Role of the user(you can provide user role or the **user_role_id** whatever you like if provided role is not exist it will be created).
+* **user_role_id**    - An integer that contain User Role ID of the user(You have to provide only if you did not give the **user_role** ).
+* **user_meta**       - An array containing user meta data. array must be as per schema definition of user_meta table. You have full freedom to create your meta_table with your requirement. for example table you can provide the value as array('first_name'=>'First', 'last_name'=>'Last')
+* **email**           - A string that contain user email address
+* **password**        - A string that contain plain password for the user
+* **status**          - An integer 0(Active user) or 1(Disabled User)
 
-[1]: ./#userdata-details
+[1]: ./api.md#userdata-details
