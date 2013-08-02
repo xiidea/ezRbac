@@ -13,7 +13,7 @@ Key Features
 * Support Clean Url routing!
 * Easy to adapt existing schema just by editing config file!!
 * Usable with your existing login system!
-* Api[./docs/api.md] to interact with library
+* [Api](./docs/api.md) to interact with library
 * User meta table include profile data (like: name, address etc)for an user
 * Mailer function override to send recovery email using your own function
 * Coming more....!!!
