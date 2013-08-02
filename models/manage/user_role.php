@@ -28,7 +28,7 @@ class user_role extends  CI_Model {
     /*
      * Helpful to adapt your db without modifying the code!!
      */
-    private $_schema_map=array(
+    private $_schema=array(
         'id'    => 'id',
         'role_name'=>'role_name'
     );
@@ -44,7 +44,7 @@ class user_role extends  CI_Model {
         $this->CI = & get_instance();
         $this->_table_name=$this->CI->config->item('user_role_table','ez_rbac');
         $schema=$this->CI->config->item('schema_user_role','ez_rbac');
-        ($schema) AND $this->_schema_map=$schema;
+        ($schema) AND $this->_schema=$schema;
     }
 
     /**
@@ -57,8 +57,8 @@ class user_role extends  CI_Model {
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row){
                 $retarr[]=array(
-                    'id'=>$row->{$this->_schema_map['id']},
-                    'role_name'=>$row->{$this->_schema_map['role_name']}
+                    'id'=>$row->{$this->_schema['id']},
+                    'role_name'=>$row->{$this->_schema['role_name']}
                 );
             }
         }
@@ -66,13 +66,13 @@ class user_role extends  CI_Model {
     }
 
     public function get_role_id($roleName = ""){
-        $this->db->like($this->_schema_map['role_name'], $roleName, 'none');
+        $this->db->like($this->_schema['role_name'], $roleName, 'none');
 
         $query = $this->db->get($this->_table_name, 1);
 
         if($query->num_rows() > 0){
             $result = $query->result();
-            return $result[0]->{$this->_schema_map['id']};
+            return $result[0]->{$this->_schema['id']};
         }
 
         return null;
@@ -85,12 +85,12 @@ class user_role extends  CI_Model {
             return null;
         }
 
-        $this->db->where(array($this->_schema_map['id'] => $id));
+        $this->db->where(array($this->_schema['id'] => $id));
         $query = $this->db->get($this->_table_name, 1);
 
         if($query->num_rows() > 0){
             $result = $query->result();
-            return $result[0]->{$this->_schema_map['role_name']};
+            return $result[0]->{$this->_schema['role_name']};
         }
 
         return null;
@@ -105,7 +105,7 @@ class user_role extends  CI_Model {
        $role_id = $this->get_role_id($roleName);
 
         if(!$role_id){
-            $this->db->insert($this->_table_name, array($this->_schema_map['role_name']=> $roleName ));
+            $this->db->insert($this->_table_name, array($this->_schema['role_name']=> $roleName ));
             $role_id =  $this->db->insert_id();
         }
 
@@ -124,8 +124,8 @@ class user_role extends  CI_Model {
         }
 
         $this->db->update($this->_table_name,
-                        array($this->_schema_map['role_name']=> $roleName ),
-                        array($this->_schema_map['id'] => $id));
+                        array($this->_schema['role_name']=> $roleName ),
+                        array($this->_schema['id'] => $id));
 
     }
 

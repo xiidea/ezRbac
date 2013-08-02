@@ -43,6 +43,8 @@ $config['password_recovery_subject']="Password Reset Request";
 $config['auto_login_table']="user_autologin";
 //The database table  name used to store user data
 $config['user_table']="system_users";
+//The database table  name used to store user meta data
+$config['user_meta_table']="user_meta";
 //The database table  name used to store user role info
 $config['user_role_table']="user_role";
 //The database table  name used to store Access Control List as per user role
@@ -61,8 +63,6 @@ $config['schema_user_table']=array(
                                     'reset_request_code' => 'reset_request_code',
                                     'reset_request_time' => 'reset_request_time',
                                     'reset_request_ip' => 'reset_request_ip',
-                                    'new_email' => 'new_email',
-                                    'new_password' => 'new_password',
                                     'verification_status' => 'verification_status',
                                     'status' => 'status'
                                 );
@@ -70,6 +70,8 @@ $config['schema_user_role']=array(
                                     'id' => 'id',
                                     'role_name'=>'role_name'
                                 );
+
+$config['user_meta_user_id'] = 'user_id';
 
 //Enable showing the email on browser rather then sending it. for debug and dev environment
 $config['show_password_reset_mail']=false;

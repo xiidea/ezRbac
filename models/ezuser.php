@@ -6,9 +6,9 @@
  * This model represents user  data. It can be used
  * for retriving user data and validate agains the login.
  *
- * @version	1.2
+ * @version	2
  * @package ezRbac
- * @since ezRbac v 0.3
+ * @since ezRbac v 2.0
  * @author Roni Kumar Saha<roni.cse@gmail.com>
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
@@ -30,7 +30,20 @@ class Ezuser extends  CI_Model {
      */
     private $_schema;
 
+    /**
+     * @var $_field store the schema of user table
+     */
+    private $_fields;
 
+    /**
+     * @var $_meta_table_name store the name of user_meta table
+     */
+    private $_meta_table;
+
+    /**
+     * @var $_user_meta_field store the schema of user table
+     */
+    private $_user_meta_fields;
 
     /**
      * constructor function
@@ -42,7 +55,22 @@ class Ezuser extends  CI_Model {
         $this->CI=& get_instance();
 
         $this->_table_name=$this->CI->config->item('user_table','ez_rbac');
+        $this->_meta_table=$this->CI->config->item('user_meta_table','ez_rbac');
         $this->_schema=$this->CI->config->item('schema_user_table','ez_rbac');
+
+        $this->validate_schema();
+        $this->_user_meta_fields     = $this->db->list_fields($this->_meta_table);
+        $this->_user_meta_fields = array_combine($this->_user_meta_fields, $this->_user_meta_fields);
+    }
+
+    private function validate_schema(){
+        $this->_fields     = $this->db->list_fields($this->_table_name);
+        $missingFields = array_diff($this->_schema, $this->_fields);
+
+        if(!empty($missingFields)){
+            $missingStr = '<b>'.implode(', ', $missingFields).'<b>';
+            show_error("The database schema for <b>{$this->_table_name}</b> Table is missing some required field(s): {$missingStr}");
+        }
     }
 
     private function _f($f){
@@ -84,9 +112,32 @@ class Ezuser extends  CI_Model {
 
         $query = $this->db->get($this->_table_name, 1);
 
-        if ($query->num_rows() > 0) return $query->row();
+        if ($query->num_rows() < 1 ) {return NULL;}
 
-        return NULL;
+        $row = $query->row();
+        $row->meta = $this->get_user_meta($row->{$this->_schema['id']});
+
+        return $row;
+    }
+
+    public function get_user_meta($user_id)
+    {
+        $key_field = $this->CI->config->item('user_meta_user_id','ez_rbac');
+        $this->db->where($key_field, $user_id);
+
+        $query = $this->db->get($this->_meta_table, 1);
+
+        if ($query->num_rows() > 0) return $query->row();
+    }
+
+    public function update_user_meta($user_id, $data)
+    {
+        $key_field = $this->CI->config->item('user_meta_user_id','ez_rbac');
+        if(!isset($data[$key_field])){
+            $data[$key_field] = $user_id;
+        }
+
+        return $this->on_duplicate_update($this->_meta_table, $data);
     }
 
     function getUserID($user)
@@ -135,6 +186,7 @@ class Ezuser extends  CI_Model {
     /**
      * Save new password after hashing that
      * @param $npass
+     * @param $email
      */
     public function set_new_password($npass,$email){
         $salt=$this->generateSalt();
@@ -184,8 +236,11 @@ class Ezuser extends  CI_Model {
     }
 
     public function update($data = array()){
+        $user = false;
 
-        $user = $this->get_user_by_email($data['email']);
+        if(isset($data['email'])){
+            $user = $this->get_user_by_email($data['email']);
+        }
 
         if($user && $data['id'] !== $user->{$this->_schema['id']}){
             throw new Exception('Email already register');
@@ -201,10 +256,59 @@ class Ezuser extends  CI_Model {
         $data = $this->parseData($data);
 
         $this->db->update($this->_table_name,$data,
-            array($this->_schema_map['id'] => $id));
+            array($this->_schema['id'] => $id));
 
     }
 
+    /**
+     * @param $table
+     * @param null $data
+     * @param null $update
+     *
+     * @return bool
+     */
+    public function on_duplicate_update($table, $data = NULL, $update = NULL)
+    {
+        if (is_null($data)) {
+            return FALSE;
+        }
+
+        $sql = $this->_duplicate_insert_sql($table, $data, $update);
+        return $this->db->query($sql);
+    }
+
+    /**
+     * @param      $table
+     * @param      $values
+     * @param null $update
+     *
+     * @return string
+     */
+    private function _duplicate_insert_sql($table, $values, $update = NULL)
+    {
+        $updateStr = array();
+        $keyStr    = array();
+        $valStr    = array();
+
+        foreach ($values as $key => $val) {
+            $keyStr[] = $key;
+            $valStr[] = $this->db->escape($val);
+        }
+
+        if (is_null($update)) {
+            $update = $values;
+        }
+
+        foreach ($update as $key => $val) {
+            $updateStr[] = $key . " = '{$val}'";
+        }
+
+        $sql = "INSERT INTO " . $this->db->_protect_identifiers($table) . " (" . implode(', ', $keyStr) . ") ";
+        $sql .= "VALUES (" . implode(', ', $valStr) . ") ";
+        $sql .= "ON DUPLICATE KEY UPDATE " . implode(", ", $updateStr);
+
+        return $sql;
+    }
 
     private function parseData($data)
     {

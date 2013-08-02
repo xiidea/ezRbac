@@ -13,12 +13,15 @@ Key Features
 * Support Clean Url routing!
 * Easy to adapt existing schema just by editing config file!!
 * Usable with your existing login system!
+* Api[./docs/api.md] to interact with library
+* User meta table include profile data (like: name, address etc)for an user
+* Mailer function override to send recovery email using your own function
 * Coming more....!!!
- 
+
 
 Current Active Version
 ======================
-v 0.3 Released!
+v 1.0 Released!
 
  
 How To Install
@@ -57,7 +60,7 @@ Its easy to enable with 2 steps
 
 1. Set <code>$config['use_routing']=true;</code> at **./ezRbac/config/ez_rbac.php** 
 
-2. set <code>$route['^(rbac)/(.+)$'] =$route['default_controller']."/index/rbac/$2"; </code> at **/application/config/routes.php** (where **rbac** can be replaced whatever you like by setting the <code>$config['ezrbac_url']='rbac';</code>)
+2. set <code>$route['^(rbac)/(.+)$'] =$route['default_controller']."/index/$1/$2"; </code> at **/application/config/routes.php** (where **rbac** can be replaced whatever you like by setting the <code>$config['ezrbac_url']='rbac';</code>)
 
 Customization
 =============

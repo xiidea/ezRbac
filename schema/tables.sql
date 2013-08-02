@@ -2,7 +2,8 @@
 SQLyog Ultimate v9.62 
 MySQL - 5.1.41 : Database - ezrbac
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -27,12 +28,10 @@ CREATE TABLE `system_users` (
   `reset_request_code` varchar(128) DEFAULT NULL,
   `reset_request_time` datetime DEFAULT NULL,
   `reset_request_ip` varchar(64) DEFAULT NULL,
-  `new_email` varchar(254) DEFAULT NULL,
-  `new_password` varchar(160) DEFAULT NULL,
   `verification_status` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Table structure for table `user_access_map` */
 
@@ -43,7 +42,7 @@ CREATE TABLE `user_access_map` (
   `controller` varchar(255) NOT NULL,
   `permission` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`user_role_id`,`controller`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Table structure for table `user_autologin` */
 
@@ -67,7 +66,20 @@ CREATE TABLE `user_role` (
   `role_name` varchar(50) DEFAULT NULL,
   `default_access` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+/*Table structure for table `user_meta` */
+
+DROP TABLE IF EXISTS `user_meta`;
+
+CREATE TABLE `user_meta` (
+  `user_id` bigint(20) unsigned NOT NULL,
+  `first_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) DEFAULT NULL,
+  `phone` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

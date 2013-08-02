@@ -2,7 +2,8 @@
 SQLyog Ultimate v9.62 
 MySQL - 5.1.41 : Database - ezrbac
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -14,7 +15,7 @@ MySQL - 5.1.41 : Database - ezrbac
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 /*Data for the table `system_users` */
 
-insert  into `system_users`(`id`,`email`,`password`,`salt`,`user_role_id`,`last_login`,`last_login_ip`,`reset_request_code`,`reset_request_time`,`reset_request_ip`,`new_email`,`new_password`,`verification_status`) values (1,'admin@admin.com','8e666f12a66c17a952a1d5e273428e478e02d943','4f6cdddc4979b8.51434094',1,'2012-03-24 02:52:51',0,NULL,NULL,NULL,NULL,NULL,1);
+insert  into `system_users`(`id`,`email`,`password`,`salt`,`user_role_id`,`last_login`,`last_login_ip`,`reset_request_code`,`reset_request_time`,`reset_request_ip`,`verification_status`) values (1,'admin@admin.com','8e666f12a66c17a952a1d5e273428e478e02d943','4f6cdddc4979b8.51434094',1,'2012-03-24 02:52:51',0,NULL,NULL,NULL,1);
 
 /*Data for the table `user_access_map` */
 

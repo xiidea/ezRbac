@@ -140,40 +140,50 @@ class ezlogin
 
             // Does password match hash in database?
             if ($this->CI->encrypt->sha1($password.$user->{$this->_user_schema['salt']})===$user->{$this->_user_schema['password']}){		// password ok
-
-                if ($user->verification_status == 0) {							// fail - not verified
-                    $this->error = 'email is not verified';
-                    return false;
-                }
-                if ($user->{$this->_user_schema['status']} == 0) {							// fail - not activated
-                    $this->error = 'account is disabled! contact system administrator';
-                    return false;
-                }
-
-                if(!$user->{$this->_user_schema['user_role_id']}){
-                    $this->error = 'user role is not defined for this user';
-                    return false;
-                }
-
-                $this->CI->session->set_userdata(array(
-                    'user_id'	=> $user->{$this->_user_schema['id']},
-                    'user_email'	=> $user->{$this->_user_schema['email']},
-                    'access_role'	=> $user->{$this->_user_schema['user_role_id']}
-                ));
-
-                // success
-                if ($remember) {
-                    $this->create_autologin($user->{$this->_user_schema['id']});
-                }
-                $this->CI->ezuser->update_login_info($user->{$this->_user_schema['id']});
-                return TRUE;
-            } 														// fail - wrong password
+               return $this->register_session($user, $remember);
+            }
+            													// fail - wrong password
             $this->error =  'Incorrect Password';
             return false;
         }        															// fail - wrong login
         $this->error =  'User is not registered';
         return false;
 
+    }
+
+    public function register_session($user, $remember = false, $cookie = false){
+        if ($user->verification_status == 0) {							// fail - not verified
+            $this->error = 'email is not verified';
+            return false;
+        }
+        if ($user->{$this->_user_schema['status']} == 0) {							// fail - not activated
+            $this->error = 'account is disabled! contact system administrator';
+            return false;
+        }
+
+        if(!$user->{$this->_user_schema['user_role_id']}){
+            $this->error = 'user role is not defined for this user';
+            return false;
+        }
+
+        $this->CI->session->set_userdata(array(
+            'user_id'	=> $user->{$this->_user_schema['id']},
+            'user_email'	=> $user->{$this->_user_schema['email']},
+            'access_role'	=> $user->{$this->_user_schema['user_role_id']}
+        ));
+
+        if($cookie){
+            // Renew users cookie to prevent it from expiring
+            set_cookie(array(
+                'name' 		=> $this->CI->config->item('autologin_cookie_name', 'ez_rbac'),
+                'value'		=> $cookie,
+                'expire'	=> $this->CI->config->item('autologin_cookie_life', 'ez_rbac'),
+            ));
+        }elseif($remember) {
+            $this->create_autologin($user->{$this->_user_schema['id']});
+        }
+        $this->CI->ezuser->update_login_info($user->{$this->_user_schema['id']});
+        return TRUE;
     }
 
 
@@ -212,34 +222,7 @@ class ezlogin
 
                 $this->CI->load->model('user_autologin');
                 if (!is_null($user = $this->CI->user_autologin->get($data['user_id'], md5($data['key'])))) {
-
-                    if ($user->verification_status == 0) {							// fail - not verified
-                        $this->error = 'email is not verified';
-                        return false;
-                    }
-                    if ($user->{$this->_user_schema['status']} == 0) {							// fail - not activated
-                        $this->error = 'account is disabled! contact system administrator';
-                        return false;
-                    }
-
-
-                    // Login user
-                    $this->CI->session->set_userdata(array(
-                        'user_id'	=> $user->{$this->_user_schema['id']},
-                        'user_email'	=> $user->{$this->_user_schema['email']},
-                        'access_role'	=> $user->{$this->_user_schema['user_role_id']},
-                    ));
-
-                    // Renew users cookie to prevent it from expiring
-                    set_cookie(array(
-                        'name' 		=> $this->CI->config->item('autologin_cookie_name', 'ez_rbac'),
-                        'value'		=> $cookie,
-                        'expire'	=> $this->CI->config->item('autologin_cookie_life', 'ez_rbac'),
-                    ));
-
-                    $this->CI->load->model('ezuser');
-                    $this->CI->ezuser->update_login_info($user->{$this->_user_schema['id']});
-                    return TRUE;
+                    return $this->register_session($user, false, $cookie);
                 }
             }
         }
@@ -393,6 +376,12 @@ class ezlogin
         $date = new DateTime($user->{$this->_user_schema['reset_request_time']});
         $date->modify("+2 day");
         return (md5($user->{$this->_user_schema['reset_request_code']}.$user->{$this->_user_schema['reset_request_time']}.$user->{$this->_user_schema['reset_request_ip']})===$key && $date>new DateTime());
+    }
+
+
+    public function getError()
+    {
+        return $this->error;
     }
 
     /**
