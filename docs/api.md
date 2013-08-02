@@ -27,4 +27,4 @@ The **$userdata** array can contain the following fields
 **password**        - A string that contain plain password for the user
 **status**          - An integer 0(Active user) or 1(Disabled User)
 
-[1]: ./#userdata-details
+[1]: ./api.md#userdata-details
