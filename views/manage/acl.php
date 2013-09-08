@@ -50,10 +50,10 @@
 						<label>Chose Privileges<span class="required">*</span></label>
 					</div>
                     <div class="clear"></div>
-                    <?php $l=count($access_list);  $i=0; foreach($access_list as $access){  $l--; ?>
+                    <?php  $i=0; foreach($access_list as $access){  ?>
                    <div class="row">
 						<label for="chk_permisssion_<?php echo $i ?>" class="secondlevel">Can <?php echo ucfirst($access); ?>?</label>
-                        <input id="chk_permisssion_<?php echo $i ?>" class="permission_cls" type="checkbox" name="permission[]" value="<?php echo pow(2,$l)  ?>" />
+                        <input id="chk_permisssion_<?php echo $i ?>" class="permission_cls" type="checkbox" name="permission[]" value="<?php echo pow(2,$i)  ?>" />
 				   </div>
                    <?php $i++;  } ?>
 

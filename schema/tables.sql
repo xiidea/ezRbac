@@ -35,12 +35,14 @@ CREATE TABLE `system_users` (
 
 /*Table structure for table `user_access_map` */
 
+/*Table structure for table `user_access_map` */
+
 DROP TABLE IF EXISTS `user_access_map`;
 
 CREATE TABLE `user_access_map` (
   `user_role_id` int(10) NOT NULL,
   `controller` varchar(255) NOT NULL,
-  `permission` varchar(10) DEFAULT NULL,
+  `permission` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`user_role_id`,`controller`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

@@ -19,7 +19,7 @@ insert  into `system_users`(`id`,`email`,`password`,`salt`,`user_role_id`,`last_
 
 /*Data for the table `user_access_map` */
 
-insert  into `user_access_map`(`user_role_id`,`controller`,`permission`) values (1,'admin/welcome','00001');
+insert  into `user_access_map`(`user_role_id`,`controller`,`permission`) values (1,'admin/welcome',1);
 
 /*Data for the table `user_autologin` */
 
