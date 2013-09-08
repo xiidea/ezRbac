@@ -21,7 +21,7 @@ Key Features
 
 Current Active Version
 ======================
-[v1.1 Released](https://github.com/xiidea/ezRbac/archive/v1.1.zip)!
+[v1.1 Released](https://github.com/xiidea/ezRbac/archive/v1.1.1.zip)!
 
  
 How To Install
