@@ -157,14 +157,20 @@ class ezRbacHook
         }
 
 
+        $controller_methods = get_class_methods($this->_controller_name);
+        $method=$this->CI->router->fetch_method();
+
+        //Called method does not exist!
+        if(!in_array($method, $controller_methods)){
+            return;
+        }
+
         //Get custom access map defined in controller
-        if (in_array(strtolower('access_map'), array_map('strtolower', get_class_methods($this->_controller_name)))) {
-            $this->_custom_access_map = $this->CI->access_map();
+        if(in_array('access_map', $controller_methods)){
+            $this->_custom_access_map=$this->CI->access_map();
         }
 
         $this->CI->load->library('accessmap', array("controller" => $this->_controller));
-
-        $method = $this->CI->router->fetch_method();
 
         //Check if the request is ajax or not
         $this->_isAjaxCall = ($this->CI->input->get('ajax') || $this->CI->input->is_ajax_request());
