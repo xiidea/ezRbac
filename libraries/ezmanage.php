@@ -124,12 +124,14 @@ class ezmanage
         switch ($param[0]){
             case 'get_permission':
                 $this->CI->accessmap->initialize($this->CI->input->post('controller'),$this->CI->input->post('user_role_id'));
-                echo json_encode($this->CI->accessmap->get_access_str());
+                $access = $this->CI->accessmap->get_access_str();
+                $access_str = strrev($this->CI->accessmap->validate(decbin($access)));
+                echo json_encode(str_split($access_str));
                 break;
             case 'update':
                 $this->CI->load->model('user_access_map');
                 $permission=isset($_POST['permission'])?$_POST['permission']:array();
-                $p= $this->CI->accessmap->validate(decbin(array_sum($permission)));
+                $p= (int)array_sum($permission);
                 $this->CI->user_access_map->set_permission($this->CI->input->post('controller'),$this->CI->input->post('user_role_id'),$p);
                 echo "ok";
                 break;

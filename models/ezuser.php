@@ -157,8 +157,6 @@ class Ezuser extends  CI_Model {
         $this->db->set($this->_schema['reset_request_code'], NULL);
         $this->db->set($this->_schema['reset_request_time'], NULL);
         $this->db->set($this->_schema['reset_request_ip'], NULL);
-        $this->db->set($this->_schema['new_email'], NULL);
-        $this->db->set($this->_schema['new_password'], NULL);
         $this->db->set($this->_schema['verification_status'], 1);
         $this->db->set($this->_schema['last_login_ip'], $this->CI->input->ip_address());
         $this->db->set($this->_schema['last_login'], date('Y-m-d H:i:s'));

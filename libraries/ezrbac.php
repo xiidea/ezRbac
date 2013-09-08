@@ -4,10 +4,10 @@
  * The Api class for this package
  *
  * @version    1.0
- * @package ezRbac
- * @since ezRbac v 1.0
- * @author Roni Kumar Saha<roni.cse@gmail.com>
- * @copyright Copyright &copy; 2012 Roni Saha
+ * @package    ezRbac
+ * @since      ezRbac v 1.0
+ * @author     Roni Kumar Saha<roni.cse@gmail.com>
+ * @copyright  Copyright &copy; 2012 Roni Saha
  * @license    GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
@@ -46,7 +46,7 @@ class ezrbac
         if (!$this->user) {
             $user_id = $this->getCurrentUserID();
             if (!$user_id) {
-                return null;
+                return NULL;
             }
 
             $this->user = $this->CI->ezuser->get_user_by_id($user_id);
@@ -66,7 +66,7 @@ class ezrbac
             return $user_id;
         }
 
-        return null;
+        return NULL;
     }
 
     /**
@@ -74,6 +74,7 @@ class ezrbac
      * set current user object while login
      *
      * @param $user
+     *
      * @return mixed
      */
     public function setCurrentUser($user)
@@ -88,7 +89,7 @@ class ezrbac
      */
     public function isGuest()
     {
-        $guest = false;
+        $guest = FALSE;
 
         if ($this->CI->session->userdata($this->CI->config->item('login_session_key', 'ez_rbac'))) {
             $guest = !$this->getCurrentUserID();
@@ -102,6 +103,7 @@ class ezrbac
      * api create new user
      *
      * @param array $data
+     *
      * @return mixed
      * @throws Exception
      */
@@ -130,6 +132,7 @@ class ezrbac
      * api update user data
      *
      * @param array $data
+     *
      * @return mixed
      * @throws Exception
      */
@@ -155,12 +158,13 @@ class ezrbac
     /**
      * Helpful if you have your login verification script, you can register session just by passing the user object
      *
-     * @param $user
+     * @param      $user
      * @param bool $remember
+     *
      * @return bool
      * @throws Exception
      */
-    public function registerUserSession($user, $remember = false)
+    public function registerUserSession($user, $remember = FALSE)
     {
         if (!is_object($user)) {
             $user = $this->CI->ezuser->get_user_by_id($user);
@@ -172,10 +176,10 @@ class ezrbac
 
         if (!$success) {
             throw new Exception($this->ezlogin->getError());
-            return false;
+            return FALSE;
         }
 
-        return true;
+        return TRUE;
     }
 
     /**
@@ -183,6 +187,7 @@ class ezrbac
      * return the user meta data
      *
      * @param $user_id
+     *
      * @return mixed
      */
     public function getUserMeta($user_id)
@@ -194,6 +199,7 @@ class ezrbac
      * find and return user object by user ID
      *
      * @param $user_id
+     *
      * @return mixed
      */
     public function getUserByID($user_id)
