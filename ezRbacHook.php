@@ -60,11 +60,9 @@ class ezRbacHook
         //Make a public variable to controller so we can access it from any where within script execution!
         $this->CI->ezRbacPath = dirname(__FILE__);
 
-        $library_directory = basename($this->CI->ezRbacPath);
+        //Load configurations
+        $this->loadConfiguration();
 
-        //We should use our package resource!
-        $this->CI->load->add_package_path(APPPATH . "third_party/$library_directory/");
-        $this->CI->config->load('ez_rbac', TRUE, TRUE);
 
         //Get list of public controller from the config file
         $this->_public_controller = $this->CI->config->item('public_controller', 'ez_rbac') ?
@@ -78,6 +76,22 @@ class ezRbacHook
 
 
         $this->CI->load->library('ezrbac');
+    }
+
+    /**
+     * Load ezrbac configuration, the configuration can now put in application/config/ez_rbac.php also
+     * This way if user update this library the changed configuration can stay unchaged
+     */
+    private function loadConfiguration()
+    {
+        $library_directory = basename($this->CI->ezRbacPath);
+
+        //We should use our package resource!
+        $this->CI->load->add_package_path(APPPATH . "third_party/$library_directory/");
+        $this->CI->config->load('ez_rbac', TRUE, TRUE);
+        $this->CI->load->remove_package_path(APPPATH . "third_party/$library_directory/");
+        $this->CI->config->load('ez_rbac', TRUE, TRUE);
+        $this->CI->load->add_package_path(APPPATH . "third_party/$library_directory/");
     }
 
     /**
@@ -239,7 +253,8 @@ class ezRbacHook
      */
     function __destruct()
     {
-        $this->CI->load->remove_package_path(APPPATH . 'third_party/ezRbac/');
+        $library_directory = basename($this->CI->ezRbacPath);
+        $this->CI->load->remove_package_path(APPPATH . 'third_party/'.$library_directory.'/');
         if (isset($this->CI->we_are_done)) {
             //The script life time ends here!! We should ensure to end the output object by displaying
             //or sending headers we set earlier!!
