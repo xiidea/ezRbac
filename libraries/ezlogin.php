@@ -107,8 +107,38 @@ class ezlogin
     private function view_login_form()
     {
         $data['form_error'] = $this->error;
-        $this->CI->load->view('login/index', $data);
+        $this->load_view('login/index', $data);
         $this->end_now();
+    }
+
+    /**
+     * Proxy for the load->view() to enable template override
+     * @param $view
+     * @param $data
+     * @param bool $return
+     * @return mixed
+     */
+    private function load_view($view, $data, $return = false)
+    {
+        $this->CI->throw_exception = true;
+
+        $view_ref = $this->get_view_ref($view);
+
+        return $this->CI->load->view($view_ref, $data, $return);
+    }
+
+    /**
+     * Return the template file. If override file available, return that template
+     * @param $view
+     * @return string
+     */
+    private function get_view_ref($view)
+    {
+        $_ci_ext = pathinfo($view, PATHINFO_EXTENSION);
+        $overrideTemplate = 'ezrbac/' . $view;
+        $_ci_file = ($_ci_ext == '') ? $overrideTemplate.'.php' : $overrideTemplate;
+
+        return file_exists(APPPATH . 'views/' . $_ci_file) ? $overrideTemplate : $view;
     }
 
     /**
@@ -119,7 +149,7 @@ class ezlogin
     private function view_password_reset_form()
     {
         $data['form_error'] = $this->error;
-        $this->CI->load->view('login/reset', $data);
+        $this->load_view('login/reset', $data);
         $this->end_now();
     }
 
@@ -131,7 +161,7 @@ class ezlogin
     private function view_password_reset_message()
     {
         $data['reset_success'] = TRUE;
-        $this->CI->load->view('login/reset', $data);
+        $this->load_view('login/reset', $data);
         $this->end_now();
     }
 
@@ -298,7 +328,7 @@ class ezlogin
         if ($this->process_recovery($user)) {
             $data['reset_email_confirm'] = TRUE;
             $data['form_error']          = '';
-            $this->CI->load->view('login/index', $data);
+            $this->load_view('login/index', $data);
             $this->end_now();
         }
         $this->view_login_form();
@@ -317,7 +347,7 @@ class ezlogin
     {
         $key         = $this->CI->ezuser->requestPassword($user->{$this->_user_schema['id']});
         $data['url'] = $this->CI->ezuri->RbacUrl("resetpassword/key/$key/e/" . rawurlencode($user->{$this->_user_schema['email']}));
-        $email_body  = $this->CI->load->view('login/_password_email', $data, TRUE);
+        $email_body  = $this->load_view('login/_password_email', $data, TRUE);
 
         //Disable this while you running the script on server
         if ($this->CI->config->item('show_password_reset_mail', 'ez_rbac')) {
