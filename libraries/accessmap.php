@@ -234,7 +234,13 @@ class AccessMap{
             return $this->can($action);
         }
 
-        return FALSE;
+        $trace = debug_backtrace();
+        trigger_error(
+            'Undefined function : ' . $method .
+                ' called in ' . $trace[0]['file'] .
+                ' on line ' . $trace[0]['line'],
+            E_USER_NOTICE);
+        return NULL;
     }
 }
 
