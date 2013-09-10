@@ -16,12 +16,13 @@ Key Features
 * [Api](./docs/api.md) to interact with library
 * User meta table include profile data (like: name, address etc)for an user
 * Mailer function override to send recovery email using your own function
+* Configuration and view files can be overridden!
 * Coming more....!!!
 
 
 Current Active Version
 ======================
-[v1.1 Released](https://github.com/xiidea/ezRbac/archive/v1.1.2.zip)!
+[v1.2.0 Released](https://github.com/xiidea/ezRbac/archive/v1.2.0.zip)!
 
  
 How To Install
@@ -54,7 +55,7 @@ acl manage url : <code>/index.php/welcome/index/rbac/gui</code>
 
 If you have enabled the routing(see **How to eneable Routing**) then you can access all url like <code> /rbac/(logout|gui)</code>
 
-How to eneable Routing
+How to enable Routing
 ======================
 Its easy to enable with 2 steps
 
@@ -64,9 +65,14 @@ Its easy to enable with 2 steps
 
 Customization
 =============
-Modify the configuration to match with your choice at **./ezRbac/config/ez_rbac.php** 
+Most of the customization can be done through setting configuration values. you can customize configuration in two ways:
+
+1. (The Easy way) Modify the configuration to match with your choice at **./third_party/ezRbac/config/ez_rbac.php**
+2. (The Advanced way) Make a copy of **./third_party/ezRbac/config/ez_rbac.php** as **./application/config/ez_rbac.php** or Create new file to override the default settings. These way whenever you do update the library, you do not need to worry about your configuration values.
+
+You can override the view file also. just copy the view files into **/application/views/ezrbac/** and modify as per your need. Currently only views in **login** directory is extensible.
 
 
 Dependencies
 ============
-To use this library you you need **Codeigniter 2.1**
+To use this library you need **Codeigniter 2.1**
