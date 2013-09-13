@@ -151,7 +151,7 @@ class ezuri
             return FALSE;
 
         if ($this->CI->config->item('use_assets_within_package', 'ez_rbac')) {
-            return base_url($this->_base_url . "/assets/" . $uri);
+            return site_url($this->_base_url . "/assets/" . $uri);
         }
         return base_url($this->CI->config->item('assets_base_directory', 'ez_rbac') . "/$uri");
     }
