@@ -1,5 +1,5 @@
 {
-    "name": "xiidea/ezRbac",
+    "name": "xiidea/ezrbac",
     "version": "dev-stable",
     "type": "codeigniter-third-party",
     "description": "A simple yet easy to implement Role Based Access Control Library for Codeigniter",
@@ -15,5 +15,8 @@
         "php": ">=5.3.0",
         "composer/installers": "*"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "extra": {
+        "installer-name": "ezRbac"
+    }
 }
