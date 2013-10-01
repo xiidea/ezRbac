@@ -1,5 +1,6 @@
 {
     "name": "xiidea/ezrbac",
+    "homepage": "http://xiidea.github.io/ezRbac",
     "type": "codeigniter-third-party",
     "description": "A simple yet easy to implement Role Based Access Control Library for Codeigniter",
     "keywords": ["Role Based Access Control", "Codeigniter"],
@@ -7,7 +8,8 @@
     "authors": [
         {
             "name": "Roni Saha",
-            "email": "roni.cse@gmail.com"
+            "email": "roni.cse@gmail.com",
+            "homepage": "http://xiidea.github.io"
         }
     ],
     "require": {
