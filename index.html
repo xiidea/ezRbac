@@ -1,126 +1,93 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Ezrbac : A simple yet easy to implement Role Based Access Control Library for popular PHP framework Codeigniter" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-    <title>Ezrbac</title>
+    <title>Ezrbac by xiidea</title>
   </head>
 
   <body>
+    <header>
+      <div class="inner">
+        <h1>Ezrbac</h1>
+        <h2>A simple yet easy to implement Role Based Access Control Library for popular PHP framework Codeigniter</h2>
+        <a href="https://github.com/xiidea/ezRbac" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/xiidea/ezRbac">View on GitHub</a>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="ezrbac-api-reference" class="anchor" href="#ezrbac-api-reference"><span class="octicon octicon-link"></span></a>ezRbac Api reference</h1>
 
-          <h1 id="project_title">Ezrbac</h1>
-          <h2 id="project_tagline">A simple yet easy to implement Role Based Access Control Library for popular PHP framework Codeigniter</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/xiidea/ezRbac/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/xiidea/ezRbac/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a name="ezrbac" class="anchor" href="#ezrbac"><span class="octicon octicon-link"></span></a>ezRbac</h1>
-
-<p>A simple yet easy to implement Role Based Access Control Library for popular PHP framework Codeigniter</p>
+<p>You can use this api from your controller to interact with this library. Api methods are accessible through ezrbac property of controller.
+For an example you can use $this-&gt;ezrbac-&gt;getCurrentUser() from your controller to get the user object for logged in user.</p>
 
 <h1>
-<a name="key-features" class="anchor" href="#key-features"><span class="octicon octicon-link"></span></a>Key Features</h1>
+<a name="available-api" class="anchor" href="#available-api"><span class="octicon octicon-link"></span></a>Available API</h1>
 
 <ul>
-<li>Easy to integrate with Codeigniter Application</li>
-<li>User Login system with password recovery integrated</li>
-<li>Easy To Customize!!!</li>
-<li>Integrated Access Control Management Interface</li>
-<li>Configurable DB Table name</li>
-<li>Support Clean Url routing!</li>
-<li>Easy to adapt existing schema just by editing config file!!</li>
-<li>Usable with your existing login system!</li>
-<li>
-<a href="./docs/api.md">Api</a> to interact with library</li>
-<li>User meta table include profile data (like: name, address etc)for an user</li>
-<li>Mailer function override to send recovery email using your own function</li>
-<li>Configuration and view files can be overridden!</li>
-<li>Coming more....!!!</li>
+<li>getCurrentUser() - return the user object for logged in user</li>
+<li>getCurrentUserID() - return the user id for logged in user</li>
+<li>isGuest() - check if accessing as guest user or not</li>
+<li>createUser($userdata) - create new user with provided <a href="./api.md#userdata-details">$userdata</a> parameter</li>
+<li>updateUser($userdata) - update existing user with provided <a href="./api.md#userdata-details">$userdata</a> parameter</li>
+<li>registerUserSession($user) - Helpful if you have your login verification script, you can register session just by passing the user object</li>
+<li>getUserMeta($user) - return the user meta data</li>
+<li>getUserByID($user_id) - find and return user object by user ID</li>
+<li>logoutUrl() - return the logout url</li>
 </ul><h1>
-<a name="current-active-version" class="anchor" href="#current-active-version"><span class="octicon octicon-link"></span></a>Current Active Version</h1>
+<a name="userdata-details" class="anchor" href="#userdata-details"><span class="octicon octicon-link"></span></a>$userdata details</h1>
 
-<p><a href="https://github.com/xiidea/ezRbac/archive/v1.2.0.zip">v1.2.0 Released</a>!</p>
+<p>The <strong>$userdata</strong> array can contain the following fields</p>
 
-<h1>
-<a name="how-to-install" class="anchor" href="#how-to-install"><span class="octicon octicon-link"></span></a>How To Install</h1>
-
-<p>Installation of this library is simple 4 steps</p>
-
-<ol>
-<li><p>Put <strong>ezRbac</strong> in the <strong>third_party</strong> Directory of your application</p></li>
-<li><p>Run the sqls in schema directory or create three tables in your database manually.</p></li>
-<li><p>Set <code>$config['enable_hooks'] = TRUE;</code> at <strong>./application/config/config.php</strong></p></li>
-<li><p>Add a hook in <strong>./application/config/hooks.php</strong></p></li>
-</ol><div class="highlight highlight-php"><pre>    <span class="nv">$hook</span><span class="p">[</span><span class="s1">'post_controller_constructor'</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-            <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook'</span><span class="p">,</span>
-            <span class="s1">'function'</span> <span class="o">=&gt;</span> <span class="s1">'AccessCheck'</span><span class="p">,</span>
-            <span class="s1">'filename'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook.php'</span><span class="p">,</span>
-            <span class="s1">'filepath'</span> <span class="o">=&gt;</span> <span class="s1">'third_party/ezRbac'</span>
-        <span class="p">);</span>
-</pre></div>
-
-<h1>
-<a name="ezrbac-specific-url" class="anchor" href="#ezrbac-specific-url"><span class="octicon octicon-link"></span></a>ezRbac Specific URL</h1>
-
-<p>logout url : <code>/index.php/welcome/index/rbac/logout</code></p>
-
-<p>acl manage url : <code>/index.php/welcome/index/rbac/gui</code></p>
-
-<p>If you have enabled the routing(see <strong>How to eneable Routing</strong>) then you can access all url like <code> /rbac/(logout|gui)</code></p>
-
-<h1>
-<a name="how-to-enable-routing" class="anchor" href="#how-to-enable-routing"><span class="octicon octicon-link"></span></a>How to enable Routing</h1>
-
-<p>Its easy to enable with 2 steps</p>
-
-<ol>
-<li><p>Set <code>$config['use_routing'] = true;</code> at <strong>./ezRbac/config/ez_rbac.php</strong></p></li>
-<li><p>set <code>$route['^(rbac)/(.+)$'] = $route['default_controller']."/index/$1/$2"; </code> at <strong>/application/config/routes.php</strong> (where <strong>rbac</strong> can be replaced whatever you like by setting the <code>$config['ezrbac_url'] = 'rbac';</code>)</p></li>
-</ol><h1>
-<a name="customization" class="anchor" href="#customization"><span class="octicon octicon-link"></span></a>Customization</h1>
-
-<p>Most of the customization can be done through setting configuration values. you can customize configuration in two ways:</p>
-
-<ol>
-<li>(The Easy way) Modify the configuration to match with your choice at <strong>./third_party/ezRbac/config/ez_rbac.php</strong>
+<ul>
+<li>
+<strong>id</strong>              - An integer The user id(while update only)</li>
+<li>
+<strong>user_role</strong>       - A string that contain User Role of the user(you can provide user role or the <strong>user_role_id</strong> whatever you like if provided role is not exist it will be created).</li>
+<li>
+<strong>user_role_id</strong>    - An integer that contain User Role ID of the user(You have to provide only if you did not give the <strong>user_role</strong> ).</li>
+<li>
+<strong>user_meta</strong>       - An array containing user meta data. array must be as per schema definition of user_meta table. You have full freedom to create your meta_table with your requirement. for example table you can provide the value as <code>array('first_name'=&gt;'First', 'last_name'=&gt;'Last')</code>
 </li>
-<li>(The Advanced way) Make a copy of <strong>./third_party/ezRbac/config/ez_rbac.php</strong> as <strong>./application/config/ez_rbac.php</strong> or Create new file to override the default settings. These way whenever you do update the library, you do not need to worry about your configuration values.</li>
-</ol><p>You can override the view file also. just copy the view files into <strong>/application/views/ezrbac/</strong> and modify as per your need. Currently only views in <strong>login</strong> directory is extensible.</p>
+<li>
+<strong>email</strong>           - A string that contain user email address</li>
+<li>
+<strong>password</strong>        - A string that contain plain password for the user</li>
+<li>
+<strong>status</strong>          - An integer 0(Active user) or 1(Disabled User)</li>
+</ul>
+        </section>
 
-<h1>
-<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h1>
+        <aside id="sidebar">
+          <a href="https://github.com/xiidea/ezRbac/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/xiidea/ezRbac/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
 
-<p>To use this library you need <strong>Codeigniter 2.1</strong></p>
-      </section>
+          <p class="repo-owner"><a href="https://github.com/xiidea/ezRbac"></a> is maintained by <a href="https://github.com/xiidea">xiidea</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Ezrbac maintained by <a href="https://github.com/xiidea">xiidea</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+  
   </body>
 </html>
