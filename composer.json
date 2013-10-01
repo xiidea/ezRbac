@@ -1,0 +1,19 @@
+{
+    "name": "xiidea/ezRbac",
+    "version": "dev-stable",
+    "type": "codeigniter-third-party",
+    "description": "A simple yet easy to implement Role Based Access Control Library for Codeigniter",
+    "keywords": ["Role Based Access Control", "Codeigniter"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roni Saha",
+            "email": "roni.cse@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "composer/installers": "*"
+    },
+    "minimum-stability": "dev"
+}
