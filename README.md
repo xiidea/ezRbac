@@ -46,8 +46,7 @@ Installation of this library is simple 4 steps
         );
 ```
 
-##Default credential
-===================
+##Default credential   
 If you have imported the provided data.sql then the default credential is
 
     user: 		admin@admin.com
