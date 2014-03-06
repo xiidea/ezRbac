@@ -31,7 +31,7 @@ Installation of this library is simple 4 steps
 
 1. Put **ezRbac** in the **third_party** Directory of your application
 
-2. Run the sqls in schema directory or create three tables in your database manually.
+2. Run the SQL in schema directory or create three tables in your database manually.
 
 3. Set <code>$config['enable_hooks'] = TRUE;</code> at **./application/config/config.php**
 
@@ -45,6 +45,13 @@ Installation of this library is simple 4 steps
             'filepath' => 'third_party/ezRbac'
         );
 ```
+
+##Default credential
+===================
+If you have imported the provided data.sql then the default credential is
+
+    user: 		admin@admin.com
+    password: 	123456
 
 
 ezRbac Specific URL
