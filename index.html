@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Ezrbac | Role Based Access Control Library for Codeigniter</title>
+    <title>Ezrbac</title>
   </head>
 
   <body>
@@ -55,9 +55,9 @@
 <li>Configuration and view files can be overridden!</li>
 <li>Coming more....!!!</li>
 </ul><h1>
-<a name="current-active-version" class="anchor" href="#current-active-version"><span class="octicon octicon-link"></span></a>Current Active Version</h1>
+<a name="current-stable-release" class="anchor" href="#current-stable-release"><span class="octicon octicon-link"></span></a>Current Stable Release</h1>
 
-<p><a href="https://github.com/xiidea/ezRbac/archive/v1.2.1.zip">v1.2.1 Released</a>!</p>
+<p><a href="https://github.com/xiidea/ezRbac/archive/v1.2.2.zip">v1.2.2 Released</a>!</p>
 
 <h1>
 <a name="how-to-install" class="anchor" href="#how-to-install"><span class="octicon octicon-link"></span></a>How To Install</h1>
@@ -66,16 +66,40 @@
 
 <ol>
 <li><p>Put <strong>ezRbac</strong> in the <strong>third_party</strong> Directory of your application</p></li>
-<li><p>Run the sqls in schema directory or create three tables in your database manually.</p></li>
+<li><p>Run the SQL in schema directory or create three tables in your database manually.</p></li>
 <li><p>Set <code>$config['enable_hooks'] = TRUE;</code> at <strong>./application/config/config.php</strong></p></li>
-<li><p>Add a hook in <strong>./application/config/hooks.php</strong></p></li>
-</ol><div class="highlight highlight-php"><pre>    <span class="nv">$hook</span><span class="p">[</span><span class="s1">'post_controller_constructor'</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-            <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook'</span><span class="p">,</span>
-            <span class="s1">'function'</span> <span class="o">=&gt;</span> <span class="s1">'AccessCheck'</span><span class="p">,</span>
-            <span class="s1">'filename'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook.php'</span><span class="p">,</span>
-            <span class="s1">'filepath'</span> <span class="o">=&gt;</span> <span class="s1">'third_party/ezRbac'</span>
-        <span class="p">);</span>
+<li><p>Add a hook in <strong>./application/config/hooks.php</strong> </p></li>
+</ol><div class="highlight highlight-php"><pre><span class="nv">$hook</span><span class="p">[</span><span class="s1">'post_controller_constructor'</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook'</span><span class="p">,</span>
+    <span class="s1">'function'</span> <span class="o">=&gt;</span> <span class="s1">'AccessCheck'</span><span class="p">,</span>
+    <span class="s1">'filename'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook.php'</span><span class="p">,</span>
+    <span class="s1">'filepath'</span> <span class="o">=&gt;</span> <span class="s1">'third_party/ezRbac'</span>
+<span class="p">);</span>
 </pre></div>
+
+<h1>
+<a name="map-custom-actions-to-access-map" class="anchor" href="#map-custom-actions-to-access-map"><span class="octicon octicon-link"></span></a>Map custom actions to access map</h1>
+
+<p>Define a public function named access_map in your controller something like bellow:   </p>
+
+<div class="highlight highlight-php"><pre> <span class="k">public</span> <span class="k">function</span> <span class="nf">access_map</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'index'</span><span class="o">=&gt;</span><span class="s1">'view'</span><span class="p">,</span>
+            <span class="s1">'update'</span><span class="o">=&gt;</span><span class="s1">'edit'</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+</pre></div>
+
+<p>The index of the array is the actual action name, and the value mapped to the access privileges configured as <code>$config['default_access_map'] = array("view", "create", "edit", "delete", "publish")<code></code></code></p>
+
+<h2>
+<a name="default-credential" class="anchor" href="#default-credential"><span class="octicon octicon-link"></span></a>Default credential</h2>
+
+<p>If you have imported the provided data.sql then the default credential is</p>
+
+<pre><code>user:       admin@admin.com
+password:   123456
+</code></pre>
 
 <h1>
 <a name="ezrbac-specific-url" class="anchor" href="#ezrbac-specific-url"><span class="octicon octicon-link"></span></a>ezRbac Specific URL</h1>
@@ -106,6 +130,156 @@
 </ol><p>You can override the view file also. just copy the view files into <strong>/application/views/ezrbac/</strong> and modify as per your need. Currently only views in <strong>login</strong> directory is extensible.</p>
 
 <h1>
+<a name="configuration-options" class="anchor" href="#configuration-options"><span class="octicon octicon-link"></span></a>Configuration Options</h1>
+
+<ul>
+<li><p><strong>public_controller</strong><br>
+type: array<br>
+default : array()<br>
+List of public controller which access will not be checked by our library</p></li>
+<li><p><strong>ajax_no_permission_msg</strong><br>
+type: string<br>
+default : You do not have permission to perform this action!
+Message to return while performing an ajax request instead of viewing the full restricted page, so you can handle the situation by your self.</p></li>
+<li><p><strong>default_access</strong><br>
+type: boolean<br>
+default : FALSE<br>
+The default access for a unknown method TRUE for give access denied otherwise.</p></li>
+<li><p><strong>default_access_map</strong><br>
+type: array<br>
+default : array("view", "create", "edit", "delete", "publish")<br>
+Access Map array Used by the system. You can name these as you like and you can add/remove access name.</p></li>
+<li><p><strong>autologin_cookie_life</strong><br>
+type: int<br>
+default : 2592000 (30 days)<br>
+The time in second to remember user login session with remember me checked.</p></li>
+<li><p><strong>autologin_cookie_name</strong><br>
+type: string<br>
+default : ezrbac_remember_me<br>
+The autologin cookie name used to store user data  with remember me checked.</p></li>
+<li><p><strong>redirect_url</strong><br>
+type: string<br>
+default : ""<br>
+The redirect url if access denied for a resource url(should be a public controller). Leave it empty if you are not sure about this</p></li>
+<li><p><strong>login_url</strong><br>
+type: string<br>
+default : ""<br>
+If you like to handle login then set your login url(should be a public controller) here, Leave it empty to let me handle it!! when you handling login,
+use <code>$this-&gt;ezrbac-&gt;getCurrentUser($user)</code> to register the user session.</p></li>
+<li><p><strong>login_session_key</strong><br>
+type: string<br>
+default : access_role<br>
+Login check session key name,  used to check if a user is logged in or not. Without modification of core library,
+you may use any of these: user_id/user_email/access_role</p></li>
+<li><p><strong>password_min_length</strong><br>
+type: int<br>
+default : 6<br>
+The password validation rule check for minimum length.</p></li>
+<li><p><strong>password_recovery_email</strong><br>
+type: string<br>
+default : <a href="mailto:noreply@yourdomain.com">noreply@yourdomain.com</a><br>
+The From email for password recovery email</p></li>
+<li><p><strong>password_recovery_email_name</strong><br>
+type: string<br>
+default : EzRbac<br>
+The From name for password recovery email</p></li>
+<li><p><strong>password_recovery_subject</strong><br>
+type: string<br>
+default : Password Reset Request<br>
+The subject for password recovery email</p></li>
+<li><p><strong>auto_login_table</strong><br>
+type: string<br>
+default : user_autologin<br>
+The database table name used to store auto login data</p></li>
+<li><p><strong>user_table</strong><br>
+type: string<br>
+default : system_users<br>
+The database table  name used to store user data</p></li>
+<li><p><strong>user_meta_table</strong><br>
+type: string<br>
+default : user_meta<br>
+The database table  name used to store user meta data</p></li>
+<li><p><strong>user_role_table</strong><br>
+type: string<br>
+default : user_role<br>
+The database table  name used to store user role info</p></li>
+<li><p><strong>access_map_table</strong><br>
+type: string<br>
+default : user_access_map<br>
+The database table  name used to store Access Control List as per user role</p></li>
+<li><p><strong>schema_user_table</strong><br>
+type: array  </p></li>
+</ul><div class="highlight highlight-php"><pre><span class="k">default</span> <span class="o">:</span> <span class="k">array</span><span class="p">(</span>
+          <span class="s1">'id'</span>                  <span class="o">=&gt;</span> <span class="s1">'id'</span><span class="p">,</span>
+          <span class="s1">'email'</span>               <span class="o">=&gt;</span> <span class="s1">'email'</span><span class="p">,</span>
+          <span class="s1">'password'</span>            <span class="o">=&gt;</span> <span class="s1">'password'</span><span class="p">,</span>
+          <span class="s1">'salt'</span>                <span class="o">=&gt;</span> <span class="s1">'salt'</span><span class="p">,</span>
+          <span class="s1">'user_role_id'</span>        <span class="o">=&gt;</span> <span class="s1">'user_role_id'</span><span class="p">,</span>
+          <span class="s1">'last_login'</span>          <span class="o">=&gt;</span> <span class="s1">'last_login'</span><span class="p">,</span>
+          <span class="s1">'last_login_ip'</span>       <span class="o">=&gt;</span> <span class="s1">'last_login_ip'</span><span class="p">,</span>
+          <span class="s1">'reset_request_code'</span>  <span class="o">=&gt;</span> <span class="s1">'reset_request_code'</span><span class="p">,</span>
+          <span class="s1">'reset_request_time'</span>  <span class="o">=&gt;</span> <span class="s1">'reset_request_time'</span><span class="p">,</span>
+          <span class="s1">'reset_request_ip'</span>    <span class="o">=&gt;</span> <span class="s1">'reset_request_ip'</span><span class="p">,</span>
+          <span class="s1">'verification_status'</span> <span class="o">=&gt;</span> <span class="s1">'verification_status'</span><span class="p">,</span>
+          <span class="s1">'status'</span>              <span class="o">=&gt;</span> <span class="s1">'status'</span>
+      <span class="p">);</span>  
+</pre></div>
+
+<p>The database field map for your existing system. Helpful to adapt your db without modifying the code!!</p>
+
+<ul>
+<li><p><strong>schema_user_role</strong><br>
+type: array<br>
+default : <code> array(
+          'id'        =&gt; 'id',
+          'role_name' =&gt; 'role_name'
+      );</code><br>
+The database field map for your existing system. Helpful to adapt your db without modifying the code!!</p></li>
+<li><p><strong>user_meta_user_id</strong><br>
+type: string<br>
+default : user_id<br>
+The foreign key name in user meta table</p></li>
+<li><p><strong>show_password_reset_mail</strong><br>
+type: boolean<br>
+default : FALSE<br>
+Enable showing the email on browser rather then sending it. for debug purpose. do not set true in the production</p></li>
+<li><p><strong>override_email_function</strong><br>
+type: string|false<br>
+default : FALSE<br>
+You can use your own function to send email. if you set this value to 'name_of_your_function'. <code>name_of_your_function($option)</code> will be called to send email
+where <code>$option = array('subject'=&gt;'','from'=&gt;'', 'from_name'=&gt;'', 'to'=&gt;'','body'=&gt;'');</code></p></li>
+<li><p><strong>enable_ezrbac_gui</strong><br>
+type: boolean<br>
+default : TRUE<br>
+Enable or disable the management interface</p></li>
+<li><p><strong>ezrbac_gui_url</strong><br>
+type: string<br>
+default : gui<br>
+Url identifier for ezrbac gui interface access</p></li>
+<li><p><strong>ezrbac_password</strong><br>
+type: string<br>
+default : hardtoremember<br>
+Password to access management interface of ACL</p></li>
+<li><p><strong>ezrbac_url</strong><br>
+type: string<br>
+default : rbac<br>
+Ezrbac specific url identifier.</p></li>
+<li><p><strong>use_assets_within_package</strong><br>
+type: boolean<br>
+default : TRUE<br>
+This configuration value tell the library from where it should use the resource. if set to true the js/css/images used in the library views will be served from the assets directory in package (helpful for quick setup).
+For advance user it will be better to copy the contents of assets directory in a web accessible location
+and set the <code>$config['assets_base_directory']='the/relative/path/of/assets/directory/from/root' </code></p></li>
+<li><p><strong>assets_base_directory</strong><br>
+type: string<br>
+default : rbac<br>
+Optional only used if you set the the <code>$config['use_assets_within_package']=false; </code>
+Then set the relative path of assets directory from root</p></li>
+<li><p><strong>use_routing</strong><br>
+type: boolean<br>
+default : FALSE<br>
+enable clean url for management interface by adding routing rule. if <code>$config['ezrbac_url']='rbac'</code> then you can add <code>$route['^(rbac)/(.+)$'] = $route['default_controller']."/index/$1/$2"; </code> and set the value to true.</p></li>
+</ul><h1>
 <a name="ezrbac-api-reference" class="anchor" href="#ezrbac-api-reference"><span class="octicon octicon-link"></span></a>ezRbac Api reference</h1>
 
 <p>You can use this api from your controller to interact with this library. Api methods are accessible through ezrbac property of controller.
