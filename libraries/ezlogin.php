@@ -360,23 +360,8 @@ class ezlogin
                         'to'        => $user->email,
                         'body'      => $email_body);
 
-        $mailFunction = $this->CI->config->item('override_email_function', 'ez_rbac');
+        return $this->send_email($option);
 
-        if ($mailFunction && is_callable($mailFunction)) {
-            return $mailFunction($option);
-        }
-
-        $config['mailtype'] = 'html';
-        $config['wordwrap'] = FALSE;
-        $this->CI->email->initialize($config);
-        $this->CI->email->from($option['from'], $option['form_name']);
-        $this->CI->email->to($option['to']);
-        $this->CI->email->subject($option['subject']);
-        $this->CI->email->message($email_body);
-        $this->CI->email->set_alt_message('View the mail using a html email client');
-        $this->CI->email->send();
-
-        return TRUE;
     }
 
 
@@ -452,6 +437,34 @@ class ezlogin
     {
         $this->CI->we_are_done = TRUE;
         exit;
+    }
+
+    /**
+     * @param $option
+     * @return mixed
+     */
+    protected function send_email($option)
+    {
+        $mailFunction = $this->CI->config->item('override_email_function', 'ez_rbac');
+
+        if ($mailFunction && is_callable($mailFunction)) {
+            return $mailFunction($option);
+        }
+
+        $this->CI->load->library('email');
+
+        $this->CI->email->initialize(array(
+            'mailtype' => 'html',
+            'wordwrap' => FALSE,
+        ));
+
+        $this->CI->email->from($option['from'], $option['form_name']);
+        $this->CI->email->to($option['to']);
+        $this->CI->email->subject($option['subject']);
+        $this->CI->email->message($option['body']);
+        $this->CI->email->set_alt_message('View the mail using a html email client');
+
+        return $this->CI->email->send();
     }
 
 }
