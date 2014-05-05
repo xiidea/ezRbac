@@ -211,7 +211,7 @@ class AccessMap{
             return $this->_access_details[$action] = FALSE;
         }
 
-        return $this->_access_details[$action] = (boolean)$this->_access_val & pow(2, $index);
+        return $this->_access_details[$action] = (boolean)($this->_access_val & pow(2, $index));
 
     }
 
