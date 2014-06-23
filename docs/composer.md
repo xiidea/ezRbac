@@ -6,7 +6,7 @@ http://getcomposer.org/ or just run the following command:
 
     curl -s http://getcomposer.org/installer | php
 
-If you want some [customization](./docs/customization.md), first make it in the composer.json file. Then, use the `require` command to download ezrbac to appropriate location.
+Then, use the `require` command to download ezrbac to appropriate location.
 
     php composer.phar require xiidea/ezrbac:dev-stable
 
