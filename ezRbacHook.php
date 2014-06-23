@@ -229,7 +229,7 @@ class ezRbacHook
      */
     private function load_libraries()
     {
-        $this->CI->load->helper(array('cookie', 'url'));
+        $this->CI->load->helper(array('cookie', 'url', 'file'));
         $this->CI->load->database();
         $this->CI->load->library(array('session', 'sha1', 'encrypt', 'form_validation'));
     }
