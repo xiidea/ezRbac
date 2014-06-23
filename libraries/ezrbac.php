@@ -89,7 +89,7 @@ class ezrbac
      */
     public function isGuest()
     {
-        $guest = FALSE;
+        $guest = TRUE;
 
         if ($this->CI->session->userdata($this->CI->config->item('login_session_key', 'ez_rbac'))) {
             $guest = !$this->getCurrentUserID();
