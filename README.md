@@ -29,13 +29,15 @@ How To Install
 ==============
 Installation of this library is simple 4 steps
 
-1. Put **ezRbac** in the **third_party** Directory of your application
+1. Put **ezRbac** in the **third_party** Directory of your application (or use [composer command](./docs/composer.md))
 
 2. Run the SQL in schema directory or create three tables in your database manually.
 
 3. Set <code>$config['enable_hooks'] = TRUE;</code> at **./application/config/config.php**
 
-4. Add a hook in **./application/config/hooks.php** 
+4. Set <code>$config['encryption_key'] = SOME_SECRET_KEY;</code> at **./application/config/config.php**
+
+5. Add a hook in **./application/config/hooks.php** 
 
 ```php
 $hook['post_controller_constructor'] = array(
