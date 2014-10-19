@@ -12,7 +12,7 @@
  * @license    GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class ezRbacHook
+class EzRbacHook
 {
     private
         /**
@@ -126,6 +126,7 @@ class ezRbacHook
             case 'resetpassword':
                 $this->CI->load->library('ezlogin');
                 $this->CI->ezlogin->resetPassword($this->CI->ezuri->RbacParam());
+                break;
             case 'logout':
                 $this->CI->load->library('ezlogin');
                 $this->CI->ezlogin->logout();
@@ -133,6 +134,7 @@ class ezRbacHook
                 break;
             case 'assets':
                 $this->CI->load->library('ezmedia');
+                break;
             default:
                 if ($this->CI->config->item('ezrbac_gui_url', 'ez_rbac') == $isRbacUrl) { //Is the url for manageing guii
                     //check if the setting allows us to access this or not
@@ -154,19 +156,19 @@ class ezRbacHook
      *
      * @return bool
      */
-    function AccessCheck()
+    function accessCheck()
     {
 
         $this->manage_access();
 
         //if The requested controller in a public domain so give access permission no need to go further
         if ($this->isPublicRequest()) {
-            return;
+            return null;
         }
 
         //If we do not have to handle login then its better check this now!!
         if ($this->_loginUrl != "" && !$this->CI->session->userdata($this->CI->config->item('login_session_key', 'ez_rbac'))) {
-            //user not loged in and you wished to handle it your self. Here you go
+            //user not logged in and you wished to handle it your self. Here you go
             redirect($this->_loginUrl);
         }
 
@@ -176,7 +178,7 @@ class ezRbacHook
 
         //Called method does not exist!
         if(!in_array($method, $controller_methods)){
-            return;
+            return null;
         }
 
         //Get custom access map defined in controller
@@ -259,7 +261,7 @@ class ezRbacHook
             //The script life time ends here!! We should ensure to end the output object by displaying
             //or sending headers we set earlier!!
             $this->CI->output->_display();
-            if (class_exists('CI_DB') AND isset($this->CI->db)) {
+            if (class_exists('CI_DB') && isset($this->CI->db)) {
                 $this->CI->db->close();
             }
             $this->CI = NULL;

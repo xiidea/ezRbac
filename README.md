@@ -41,9 +41,9 @@ Installation of this library is simple 4 steps
 
 ```php
 $hook['post_controller_constructor'] = array(
-    'class' => 'ezRbacHook',
-    'function' => 'AccessCheck',
-    'filename' => 'ezRbacHook.php',
+    'class' => 'EzRbacHook',
+    'function' => 'accessCheck',
+    'filename' => 'EzRbacHook.php',
     'filepath' => 'third_party/ezRbac'
 );
 ```
