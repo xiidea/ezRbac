@@ -176,7 +176,6 @@ class ezrbac
 
         if (!$success) {
             throw new Exception($this->ezlogin->getError());
-            return FALSE;
         }
 
         return TRUE;
