@@ -117,6 +117,12 @@ class Ezuser extends  CI_Model {
         $row = $query->row();
         $row->meta = $this->get_user_meta($row->{$this->_schema['id']});
 
+        $key_field = $this->CI->config->item('user_meta_user_id','ez_rbac');
+
+        if(isset($row->meta->{$key_field})) {
+            unset($row->meta->{$key_field});
+        }
+
         return $row;
     }
 
