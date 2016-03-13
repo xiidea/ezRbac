@@ -52,7 +52,7 @@ class Ezuser extends  CI_Model {
     {
         // Call the Model constructor
         parent::__construct();
-        $this->CI=& get_instance();
+        $this->CI= get_instance();
 
         $this->_table_name=$this->CI->config->item('user_table','ez_rbac');
         $this->_meta_table=$this->CI->config->item('user_meta_table','ez_rbac');

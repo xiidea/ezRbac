@@ -11,7 +11,7 @@
  * @license    GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class ezlogin
+class Ezlogin
 {
     /**
      * @var CI_Controller CI instance reference holder
@@ -32,7 +32,7 @@ class ezlogin
      */
     function __construct()
     {
-        $this->CI                 = & get_instance();
+        $this->CI                 =  get_instance();
         $this->_login_session_key = $this->CI->config->item('login_session_key', 'ez_rbac');
         $this->_user_schema       = $this->CI->config->item('schema_user_table', 'ez_rbac');
     }
@@ -50,31 +50,31 @@ class ezlogin
                 array(
                     'field' => 'username',
                     'label' => 'Email',
-                    'rules' => 'trim|required|valid_email|xss_clean'
+                    'rules' => 'trim|required|valid_email'
                 ),
                 array(
                     'field' => 'password',
                     'label' => 'Password',
-                    'rules' => 'trim|required|xss_clean|min_length[' . $this->CI->config->item('password_min_length', 'ez_rbac') . ']'
+                    'rules' => 'trim|required|min_length[' . $this->CI->config->item('password_min_length', 'ez_rbac') . ']'
                 )
             ),
             array(
                 array(
                     'field' => 'username',
                     'label' => 'Email',
-                    'rules' => 'trim|required|valid_email|xss_clean'
+                    'rules' => 'trim|required|valid_email'
                 )
             ),
             array(
                 array(
                     'field' => 'password',
                     'label' => 'New Password',
-                    'rules' => 'trim|required|xss_clean|min_length[' . $this->CI->config->item('password_min_length', 'ez_rbac') . ']|matches[re_password]'
+                    'rules' => 'trim|required|min_length[' . $this->CI->config->item('password_min_length', 'ez_rbac') . ']|matches[re_password]'
                 ),
                 array(
                     'field' => 're_password',
                     'label' => 'Re-Type Password',
-                    'rules' => 'trim|required|xss_clean|min_length[' . $this->CI->config->item('password_min_length', 'ez_rbac') . ']'
+                    'rules' => 'trim|required|min_length[' . $this->CI->config->item('password_min_length', 'ez_rbac') . ']'
                 )
             ),
         );
@@ -181,7 +181,7 @@ class ezlogin
         if (!is_null($user = $this->CI->ezuser->get_user_by_email($useemail))) { //email ok
 
             // Does password match hash in database?
-            if ($this->CI->encrypt->sha1($password . $user->{$this->_user_schema['salt']}) === $user->{$this->_user_schema['password']}) { // password ok
+            if (sha1($password . $user->{$this->_user_schema['salt']}) === $user->{$this->_user_schema['password']}) { // password ok
                 return $this->register_session($user, $remember);
             }
             // fail - wrong password

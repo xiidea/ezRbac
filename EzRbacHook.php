@@ -52,7 +52,7 @@ class EzRbacHook
     function __construct()
     {
         //Get the Codeigniter instance
-        $this->CI = & get_instance();
+        $this->CI =  get_instance();
 
         //Load al required core library
         $this->load_libraries();
@@ -62,7 +62,6 @@ class EzRbacHook
 
         //Load configurations
         $this->loadConfiguration();
-
 
         //Get list of public controller from the config file
         $this->_public_controller = $this->CI->config->item('public_controller', 'ez_rbac') ?
@@ -85,13 +84,9 @@ class EzRbacHook
     private function loadConfiguration()
     {
         $library_directory = basename($this->CI->ezRbacPath);
-
-        //We should use our package resource!
         $this->CI->load->add_package_path(APPPATH . "third_party/$library_directory/");
+        $this->CI->load->remove_package_path(APPPATH);
         $this->CI->config->load('ez_rbac', TRUE, TRUE);
-        $this->CI->load->remove_package_path(APPPATH . "third_party/$library_directory/");
-        $this->CI->config->load('ez_rbac', TRUE, TRUE);
-        $this->CI->load->add_package_path(APPPATH . "third_party/$library_directory/");
     }
 
     /**
@@ -173,9 +168,8 @@ class EzRbacHook
         }
 
 
-        $controller_methods = get_class_methods($this->_controller_name);
+        $controller_methods = get_class_methods(ucfirst($this->_controller_name));
         $method=$this->CI->router->fetch_method();
-
         //Called method does not exist!
         if(!in_array($method, $controller_methods)){
             return null;
@@ -192,7 +186,9 @@ class EzRbacHook
         $this->_isAjaxCall = ($this->CI->input->get('ajax') || $this->CI->input->is_ajax_request());
 
         $access_map = $this->CI->accessmap->get_access_map();
+
         if (!in_array($method, $access_map)) { //The method is not in default acess map
+
             if (!isset($this->_custom_access_map[$method])) { //The method is not defined in custom access map
                 if ($this->CI->config->item('default_access', 'ez_rbac')) {
                     return TRUE; //Default access for action is set to true
@@ -233,7 +229,7 @@ class EzRbacHook
     {
         $this->CI->load->helper(array('cookie', 'url', 'file'));
         $this->CI->load->database();
-        $this->CI->load->library(array('session', 'sha1', 'encrypt', 'form_validation'));
+        $this->CI->load->library(array('session', 'encrypt', 'form_validation'));
     }
 
     /**

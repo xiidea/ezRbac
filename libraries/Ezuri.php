@@ -11,7 +11,7 @@
  * @license    GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class ezuri
+class Ezuri
 {
     /**
      * @var CI_Controller CI instance reference holder
@@ -44,7 +44,7 @@ class ezuri
      */
     function __construct()
     {
-        $this->CI           = & get_instance();
+        $this->CI           =  get_instance();
         $this->_manage_url  = $this->CI->config->item('ezrbac_url', 'ez_rbac');
         $this->_use_routing = $this->CI->config->item('use_routing', 'ez_rbac');
         $this->_base_url    = $this->_use_routing ? $this->_manage_url : $this->CI->router->default_controller . "/index/$this->_manage_url";

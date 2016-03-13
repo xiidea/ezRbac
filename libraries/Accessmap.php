@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * AccessMap class file. 
+ * Accessmap class file.
  * A Simple Access Control Mapping Library
  *
  * @version	1.0
@@ -11,7 +11,7 @@
  * @copyright Copyright &copy; 2012 Roni Saha
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  */
-class AccessMap{
+class Accessmap{
 
  private
 
@@ -57,7 +57,7 @@ class AccessMap{
      */
     function __construct($param = array())
     {
-        $this->CI = & get_instance();
+        $this->CI =  get_instance();
 
         $controller = (isset($param["controller"])) ? strtolower($param["controller"]) : FALSE;
         $this->_login_session_key = $this->CI->config->item('login_session_key', 'ez_rbac');
@@ -94,6 +94,7 @@ class AccessMap{
     {
 
         $this->_access_val = $this->get_permission($controller, $access_role);
+
         $this->_access_map_array_size = count($this->_access_arr);
     }
 

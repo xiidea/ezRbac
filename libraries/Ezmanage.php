@@ -11,7 +11,7 @@
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class ezmanage
+class Ezmanage
 {
     /**
      * @var CI_Controller CI instance reference holder
@@ -34,7 +34,7 @@ class ezmanage
      */
     function __construct($param)
     {
-       $this->CI = & get_instance();
+       $this->CI =  get_instance();
        if(empty($param)){
            $this->login();
            return;
@@ -55,7 +55,7 @@ class ezmanage
             redirect($this->uri('acl'));
         }
 
-        $this->CI->form_validation->set_rules('password', 'Password', 'required|xss');
+        $this->CI->form_validation->set_rules('password', 'Password', 'required');
         if ($this->CI->form_validation->run() == FALSE){
             $data['form_error'] = validation_errors();
             $this->CI->load->view('manage/login', $data);
