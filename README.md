@@ -22,7 +22,7 @@ Key Features
 
 Current Stable Release
 ======================
-[v1.2.2 Released](https://github.com/xiidea/ezRbac/archive/v1.2.2.zip)!
+[v1.3.0 Released](https://github.com/xiidea/ezRbac/archive/v1.3.0.zip)!
 
  
 How To Install
@@ -274,4 +274,5 @@ enable clean url for management interface by adding routing rule. if <code>$conf
 
 Dependencies
 ============
-To use this library you need **Codeigniter 2.1**
+To use this library you need **Codeigniter 3.0+**
+For older version use 2.x branch

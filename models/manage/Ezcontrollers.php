@@ -14,7 +14,7 @@
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class ezcontrollers extends  CI_Model {
+class Ezcontrollers extends  CI_Model {
     /**
      * @var CI_Controller CI instance reference holder
      */
@@ -33,7 +33,7 @@ class ezcontrollers extends  CI_Model {
     {
         // Call the Model constructor
         parent::__construct();
-        $this->CI=& get_instance();
+        $this->CI= get_instance();
         $this->_controllers_basepath=realpath(APPPATH.DIRECTORY_SEPARATOR."controllers");
     }
 

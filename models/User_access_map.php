@@ -14,7 +14,7 @@
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class user_access_map extends  CI_Model {
+class User_access_map extends  CI_Model {
     /**
      * @var CI_Controller CI instance reference holder
      */
@@ -38,7 +38,7 @@ class user_access_map extends  CI_Model {
     {
         // Call the Model constructor
         parent::__construct();
-        $this->CI=& get_instance();
+        $this->CI= get_instance();
 
         $this->_table_name=$this->CI->config->item('access_map_table','ez_rbac');
         $this->_user_role_table=$this->CI->config->item('user_role_table','ez_rbac');

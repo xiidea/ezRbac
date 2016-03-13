@@ -12,7 +12,7 @@
  *
  */
 
-class ezmedia
+class Ezmedia
 {
     private $_usecache = TRUE;
 
@@ -20,7 +20,7 @@ class ezmedia
 
     function __construct()
     {
-        $this->CI = & get_instance();
+        $this->CI =  get_instance();
 
         $file = $this->CI->ezRbacPath . DIRECTORY_SEPARATOR . $this->CI->ezuri->ruri_string(DIRECTORY_SEPARATOR);
 

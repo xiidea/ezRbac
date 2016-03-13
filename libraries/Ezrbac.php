@@ -12,7 +12,7 @@
  *
  */
 
-class ezrbac
+class Ezrbac
 {
 
     /**
@@ -30,7 +30,7 @@ class ezrbac
      */
     public function __construct()
     {
-        $this->CI = & get_instance();
+        $this->CI =  get_instance();
         $this->CI->load->model('ezuser');
         $this->CI->load->library('ezlogin');
         $this->CI->load->model('manage/user_role');

@@ -14,7 +14,7 @@
  * @license	GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
  *
  */
-class User_Autologin extends CI_Model
+class User_autologin extends CI_Model
 {
     /**
      * @var $_table_name store auto_login_table name
@@ -34,7 +34,7 @@ class User_Autologin extends CI_Model
     function __construct()
 	{
 		parent::__construct();
-        $CI=& get_instance();
+        $CI= get_instance();
         $this->_table_name=$CI->config->item('auto_login_table','ez_rbac');
         $this->_user_table_name=$CI->config->item('user_table','ez_rbac');
         $this->_user_schema=$CI->config->item('schema_user_table','ez_rbac');
