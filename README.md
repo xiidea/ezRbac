@@ -1,10 +1,12 @@
 ezRbac
 ======
+
 A simple yet easy to implement Role Based Access Control Library for popular PHP framework Codeigniter
 
 
 Key Features
 ============
+
 * Easy to integrate with Codeigniter Application
 * User Login system with password recovery integrated
 * Easy To Customize!!!
@@ -22,20 +24,22 @@ Key Features
 
 Current Stable Release
 ======================
+
 [v1.3.0 Released](https://github.com/xiidea/ezRbac/archive/v1.3.0.zip)!
 
  
 How To Install
 ==============
+
 Installation of this library is simple 4 steps
 
 1. Put **ezRbac** in the **third_party** Directory of your application (or use [composer command](./docs/composer.md))
 
 2. Run the SQL in schema directory or create three tables in your database manually.
 
-3. Set <code>$config['enable_hooks'] = TRUE;</code> at **./application/config/config.php**
+3. Set `$config['enable_hooks'] = TRUE;` at **./application/config/config.php**
 
-4. Set <code>$config['encryption_key'] = SOME_SECRET_KEY;</code> at **./application/config/config.php**
+4. Set `$config['encryption_key'] = SOME_SECRET_KEY;` at **./application/config/config.php**
 
 5. Add a hook in **./application/config/hooks.php** 
 
@@ -50,6 +54,7 @@ $hook['post_controller_constructor'] = array(
 
 Map custom actions to access map
 ================================
+
 Define a public function named access_map in your controller something like bellow:   
 
 ```php
@@ -60,34 +65,38 @@ Define a public function named access_map in your controller something like bell
         );
     }
 ```
-The index of the array is the actual action name, and the value mapped to the access privileges configured as <code>$config['default_access_map'] = array("view", "create", "edit", "delete", "publish")<code>
+The index of the array is the actual action name, and the value mapped to the access privileges configured as `$config['default_access_map'] = array("view", "create", "edit", "delete", "publish")`
 
 
-##Default credential   
+##Default credential
+
 If you have imported the provided data.sql then the default credential is
 
-    user: 		admin@admin.com
-    password: 	123456
+    user:       admin@admin.com
+    password:   123456
 
 
 ezRbac Specific URL
 ===================
-logout url : <code>/index.php/welcome/index/rbac/logout</code>
 
-acl manage url : <code>/index.php/welcome/index/rbac/gui</code>
+logout url : `/index.php/welcome/index/rbac/logout`
 
-If you have enabled the routing(see **How to eneable Routing**) then you can access all url like <code> /rbac/(logout|gui)</code>
+acl manage url : `/index.php/welcome/index/rbac/gui`
+
+If you have enabled the routing(see **How to eneable Routing**) then you can access all url like `/rbac/(logout|gui)`
 
 How to enable Routing
 ======================
+
 Its easy to enable with 2 steps
 
-1. Set <code>$config['use_routing'] = true;</code> at **./ezRbac/config/ez_rbac.php**
+1. Set `$config['use_routing'] = true;` at **./ezRbac/config/ez_rbac.php**
 
-2. set <code>$route['^(rbac)/(.+)$'] = $route['default_controller']."/index/$1/$2"; </code> at **/application/config/routes.php** (where **rbac** can be replaced whatever you like by setting the <code>$config['ezrbac_url'] = 'rbac';</code>)
+2. set `$route['^(rbac)/(.+)$'] = $route['default_controller']."/index/$1/$2";` at **/application/config/routes.php** (where **rbac** can be replaced whatever you like by setting the `$config['ezrbac_url'] = 'rbac';` )
 
 Customization
 =============
+
 Most of the customization can be done through setting configuration values. you can customize configuration in two ways:
 
 1. (The Easy way) Modify the configuration to match with your choice at **./third_party/ezRbac/config/ez_rbac.php**
@@ -97,6 +106,7 @@ You can override the view file also. just copy the view files into **/applicatio
 
 Configuration Options
 =====================
+
 * **public_controller**    
 type: array    
 default : array()    
@@ -136,7 +146,7 @@ The redirect url if access denied for a resource url(should be a public controll
 type: string  
 default : ""  
 If you like to handle login then set your login url(should be a public controller) here, Leave it empty to let me handle it!! when you handling login,
-use <code>$this->ezrbac->getCurrentUser($user)</code> to register the user session.
+use `$this->ezrbac->getCurrentUser($user)` to register the user session.
 
 * **login_session_key**  
 type: string  
@@ -191,86 +201,90 @@ The database table  name used to store Access Control List as per user role
 
 * **schema_user_table**  
 type: array  
+default:  
 ```php 
-default : array(
-          'id'                  => 'id',
-          'email'               => 'email',
-          'password'            => 'password',
-          'salt'                => 'salt',
-          'user_role_id'        => 'user_role_id',
-          'last_login'          => 'last_login',
-          'last_login_ip'       => 'last_login_ip',
-          'reset_request_code'  => 'reset_request_code',
-          'reset_request_time'  => 'reset_request_time',
-          'reset_request_ip'    => 'reset_request_ip',
-          'verification_status' => 'verification_status',
-          'status'              => 'status'
-      );  
+array(
+    'id'                  => 'id',
+    'email'               => 'email',
+    'password'            => 'password',
+    'salt'                => 'salt',
+    'user_role_id'        => 'user_role_id',
+    'last_login'          => 'last_login',
+    'last_login_ip'       => 'last_login_ip',
+    'reset_request_code'  => 'reset_request_code',
+    'reset_request_time'  => 'reset_request_time',
+    'reset_request_ip'    => 'reset_request_ip',
+    'verification_status' => 'verification_status',
+    'status'              => 'status'
+);  
 ```   
 The database field map for your existing system. Helpful to adapt your db without modifying the code!!
 
 * **schema_user_role**  
-type: array  
-default : <code> array(
-              'id'        => 'id',
-              'role_name' => 'role_name'
-          );</code>  
+type: array
+default: 
+```php
+array(
+    'id'        => 'id',
+    'role_name' => 'role_name'
+);
+``` 
 The database field map for your existing system. Helpful to adapt your db without modifying the code!!
 
 * **user_meta_user_id**  
 type: string  
-default : user_id  
+default : `user_id`
 The foreign key name in user meta table
 
 * **show_password_reset_mail**  
 type: boolean  
-default : FALSE  
+default : `FALSE`
 Enable showing the email on browser rather then sending it. for debug purpose. do not set true in the production
 
 * **override_email_function**  
 type: string|false  
-default : FALSE  
-You can use your own function to send email. if you set this value to 'name_of_your_function'. <code>name_of_your_function($option)</code> will be called to send email
-where <code>$option = array('subject'=>'','from'=>'', 'from_name'=>'', 'to'=>'','body'=>'');</code>
+default : `FALSE` 
+You can use your own function to send email. if you set this value to 'name_of_your_function'. `name_of_your_function($option)` will be called to send email
+where `$option = array('subject'=>'','from'=>'', 'from_name'=>'', 'to'=>'','body'=>'');`
 
 * **enable_ezrbac_gui**  
 type: boolean  
-default : TRUE  
+default : `TRUE`
 Enable or disable the management interface
 
 * **ezrbac_gui_url**  
 type: string  
-default : gui  
+default : `gui`  
 Url identifier for ezrbac gui interface access
 
 * **ezrbac_password**  
 type: string  
-default : hardtoremember  
+default : `hardtoremember` 
 Password to access management interface of ACL
 
 * **ezrbac_url**  
 type: string  
-default : rbac  
+default : `rbac` 
 Ezrbac specific url identifier.
 
 * **use_assets_within_package**  
 type: boolean  
-default : TRUE  
+default : `TRUE`
 This configuration value tell the library from where it should use the resource. if set to true the js/css/images used in the library views will be served from the assets directory in package (helpful for quick setup).
 For advance user it will be better to copy the contents of assets directory in a web accessible location
-and set the <code>$config['assets_base_directory']='the/relative/path/of/assets/directory/from/root' </code>
+and set the `$config['assets_base_directory']='the/relative/path/of/assets/directory/from/root'`
 
 * **assets_base_directory**  
 type: string  
-default : rbac  
-Optional only used if you set the the <code>$config['use_assets_within_package']=false; </code>
+default : `rbac`
+Optional only used if you set the the `$config['use_assets_within_package']=false;`
 Then set the relative path of assets directory from root
 
 
 * **use_routing**  
 type: boolean  
 default : FALSE  
-enable clean url for management interface by adding routing rule. if <code>$config['ezrbac_url']='rbac'</code> then you can add <code>$route['^(rbac)/(.+)$'] = $route['default_controller']."/index/$1/$2"; </code> and set the value to true.
+enable clean url for management interface by adding routing rule. if `$config['ezrbac_url']='rbac'` then you can add `$route['^(rbac)/(.+)$'] = $route['default_controller']."/index/$1/$2";` and set the value to true.
 
 Dependencies
 ============
