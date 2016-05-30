@@ -70,9 +70,9 @@
 <li><p>Set <code>$config['enable_hooks'] = TRUE;</code> at <strong>./application/config/config.php</strong></p></li>
 <li><p>Add a hook in <strong>./application/config/hooks.php</strong> </p></li>
 </ol><div class="highlight highlight-php"><pre><span class="nv">$hook</span><span class="p">[</span><span class="s1">'post_controller_constructor'</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-    <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook'</span><span class="p">,</span>
+    <span class="s1">'class'</span> <span class="o">=&gt;</span> <span class="s1">'EzRbacHook'</span><span class="p">,</span>
     <span class="s1">'function'</span> <span class="o">=&gt;</span> <span class="s1">'AccessCheck'</span><span class="p">,</span>
-    <span class="s1">'filename'</span> <span class="o">=&gt;</span> <span class="s1">'ezRbacHook.php'</span><span class="p">,</span>
+    <span class="s1">'filename'</span> <span class="o">=&gt;</span> <span class="s1">'EzRbacHook.php'</span><span class="p">,</span>
     <span class="s1">'filepath'</span> <span class="o">=&gt;</span> <span class="s1">'third_party/ezRbac'</span>
 <span class="p">);</span>
 </pre></div>
