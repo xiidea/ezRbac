@@ -458,7 +458,7 @@ class Ezlogin
             'wordwrap' => FALSE,
         ));
 
-        $this->CI->email->from($option['from'], $option['form_name']);
+        $this->CI->email->from($option['from'], $option['from_name']);
         $this->CI->email->to($option['to']);
         $this->CI->email->subject($option['subject']);
         $this->CI->email->message($option['body']);
