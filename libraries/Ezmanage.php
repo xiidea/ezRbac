@@ -43,7 +43,7 @@ class Ezmanage
            show_404();
        }
        $this->_request_params=array_splice($param,1);
-       $this->$param[0]();
+       $this->{$param[0]}();
     }
 
     /**
