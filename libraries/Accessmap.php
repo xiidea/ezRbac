@@ -4,7 +4,7 @@
  * Accessmap class file.
  * A Simple Access Control Mapping Library
  *
- * @version	1.0
+ * @version	1.3
  * @package ezRbac
  * @since ezRbac v 0.3
  * @author Roni Kumar Saha<roni.cse@gmail.com>

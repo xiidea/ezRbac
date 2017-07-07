@@ -25,7 +25,7 @@ Key Features
 Current Stable Release
 ======================
 
-[v1.3.0 Released](https://github.com/xiidea/ezRbac/archive/v1.3.0.zip)!
+[v1.3.2 Released](https://github.com/xiidea/ezRbac/archive/1.3.2.zip)!
 
  
 How To Install
