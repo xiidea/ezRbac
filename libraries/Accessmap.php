@@ -35,7 +35,7 @@ class Accessmap{
      * if a controller not found in the access table what should be the default result
      * </p>
      */
-    $_default_access= 1,
+    $_default_access= 0,
 
      /**
       * @var Integer sets the access values after parsing the access string
