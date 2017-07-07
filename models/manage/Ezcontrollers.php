@@ -73,7 +73,7 @@ class Ezcontrollers extends  CI_Model {
                         $dir[] =(string) $file;
                     }
                 }else{
-                   (preg_match('/^.*\.(php)$/i', $file)) AND $files[] = "$pre".$file->getBasename(".php");
+                   (preg_match('/^.*\.(php)$/i', $file)) AND $files[] = "$pre".strtolower($file->getBasename(".php"));
                 }
         }
         if(!empty($dir)){
