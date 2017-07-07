@@ -6,7 +6,7 @@
  * This model represents user_role data. It can be used
  * for manipulation and retriving user_role data.
  *
- * @version	1.0
+ * @version	1.3
  * @package ezRbac
  * @since ezRbac v 0.3
  * @author Roni Kumar Saha<roni.cse@gmail.com>

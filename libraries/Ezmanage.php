@@ -3,7 +3,7 @@
  * ezmanage class
  * A simple class to manage ACL through a easy GUI
  *
- * @version	1.0
+ * @version	1.3
  * @package ezRbac
  * @since ezRbac v 0.2
  * @author Roni Kumar Saha<roni.cse@gmail.com>
