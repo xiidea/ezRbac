@@ -85,8 +85,9 @@ class EzRbacHook
     {
         $library_directory = basename($this->CI->ezRbacPath);
         $this->CI->load->add_package_path(APPPATH . "third_party/$library_directory/");
-        $this->CI->load->remove_package_path(APPPATH);
+        $this->CI->load->add_package_path(APPPATH);
         $this->CI->config->load('ez_rbac', TRUE, TRUE);
+        $this->CI->load->remove_package_path(APPPATH);
     }
 
     /**
