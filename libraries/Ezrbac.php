@@ -172,10 +172,10 @@ class Ezrbac
                 throw new Exception('The user not found!');
             }
         }
-        $success = $this->ezlogin->register_session($user, $remember);
+        $success = $this->CI->ezlogin->register_session($user, $remember);
 
         if (!$success) {
-            throw new Exception($this->ezlogin->getError());
+            throw new Exception($this->CI->ezlogin->getError());
         }
 
         return TRUE;
